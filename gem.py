@@ -57,7 +57,7 @@ class Gem(bijector.Bijector):
     return math_ops.multiply(x, math_ops.cumprod(1. - x, exclusive=True, axis=-1))
 
   def _inverse(self, y):
-    return math_ops.div(y, math_ops.cumsum(1. - y, exclusive=True, axis=-1))
+    return math_ops.div(y, 1. - math_ops.cumsum(y, exclusive=True, axis=-1))
 
   def _forward_log_det_jacobian(self, x):
     return math_ops.log(\
