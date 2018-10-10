@@ -7,7 +7,7 @@ D = 2  # number of documents
 N = [0] * D  # words per doc
 K = 10  # number of topics
 V = 1161 # vocabulary size
-T = 1000
+T = 30
 
 wordIds = [None] * D
 
@@ -26,7 +26,6 @@ print("load docwordID0010.txt finished")
 
 # efficient lda model
 alpha = tf.zeros([K]) + 0.1
-#theta = Dirichlet(alpha, sample_shape=D)
 theta = [None] * D
 yita = tf.zeros([V]) + 0.05
 beta = Dirichlet(yita, sample_shape=K)
@@ -43,12 +42,10 @@ for d in range(D):
 
 print("model constructed")
 
-#qtheta = Empirical(tf.Variable(tf.ones([T, D, K]) / K))
 qtheta = [None] * D
 qbeta = Empirical(tf.Variable(tf.ones([T, K, V]) / V))
 qz = [None] * D
 latent_vars = {}
-#latent_vars[theta] = qtheta
 latent_vars[beta] = qbeta
 training_data = {}
 for d in range(D):
@@ -62,8 +59,6 @@ for d in range(D):
 proposal_vars_dict = {}
 beta_cond = ed.complete_conditional(beta)
 proposal_vars_dict[beta] = beta_cond
-#theta_cond = ed.complete_conditional(theta)
-#proposal_vars_dict[theta] = theta_cond
 theta_cond = [None] * D
 z_cond = [None] * D
 for d in range(D):
@@ -81,3 +76,9 @@ for _ in range(inference.n_iter):
     info_dict = inference.update()
     inference.print_progress(info_dict)
 inference.finalize()
+
+qbeta_sample = qbeta.params[-1].eval()
+probs = [None] * K
+for k in range(K):
+    probs[k] = qbeta_sample[k, :]
+
