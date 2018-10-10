@@ -1,47 +1,44 @@
 import tensorflow as tf
 import edward as ed
 import numpy as np
+import glob
+
 # from heapq import nlargest
 
 
 
 from edward.models import *
 
-D = 2  # number of documents
+txt_files = glob.glob("DataPreprocess/nipstxt/nipstoy/doc_wordID_short*.txt")
+
+D = len(txt_files)  # number of documents
+print ("number of documents, D: {}".format(D))
 N = [0] * D  # words per doc
-K = 2  # number of topics
-V = 1161 # vocabulary size21
-T = 100
+K = 10  # number of topics
+T = 30
 
 wordIds = [None] * D
 
-with open("DataPreprocess/nipstxt/nips12/doc_wordID_short0003.txt") as f:
-    wordIds[0] = list(map(int, f.readline().split()))
-    N[0] = len(wordIds[0])
-    x = wordIds[0]
-    wordIds[0] = np.array(wordIds[0])
-
-print("load docwordID0003.txt finished")
-
-with open("DataPreprocess/nipstxt/nips12/doc_wordID_short0010.txt") as f:
-    wordIds[1] = list(map(int, f.readline().split()))
-    N[1] = len(wordIds[1])
-    y = wordIds[1]
-    wordIds[1] = np.array(wordIds[1])
+count = 0 #count number of documents
+for file in (txt_files):
+    with open(file, 'rt', encoding="ISO-8859-1") as f:
+        wordIds[count] = list(map(int, f.readline().split()))
+        N[count] = len(wordIds[count])
+        wordIds[count] = np.array(wordIds[count])
+    print("load" + file + "finished")
+    count += 1
 
 IdtoWord = {}
-with open("DataPreprocess/wordToIDshort.txt") as f:
+vocab =set()
+with open("DataPreprocess/wordToIDtoy.txt") as f:
     for line in f:
         line = line.split()
         IdtoWord[int(line[1])] = line[0]
-# print (IdtoWord)
+        vocab.add(line[0])
+V = len(vocab) # vocabulary size21
+print ("vocab size is {}".format(V))
 
-x = set(x)
-y = set(y)
-vocab = x.union(y)
-V = len(x.union(y))
-print (V)
-print("load docwordID0010.txt finished")
+print("load wordToIDtoy.txt finished")
 
 # efficient lda model
 alpha = tf.zeros([K]) + 0.1
@@ -91,7 +88,7 @@ for d in range(D):
     z_cond[d] = ed.complete_conditional(z[d])
     proposal_vars_dict[z[d]] = z_cond[d]
 
-
+print ("inference setup finished")
 
 inference = ed.Gibbs(latent_vars, proposal_vars_dict, data=training_data)
 inference.initialize(n_iter=T)
@@ -123,6 +120,3 @@ for k in range(K):
     print ('topic %d'%k)
     for word in newdict:
         print (word)
-# #
-#
-#
