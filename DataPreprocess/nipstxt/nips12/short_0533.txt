@@ -1,0 +1,1 @@
+abstract present class approximate inference algorithms graphical models qmr dt type give convergence rates algorithms jaakkola jordan algorithm verify theoretical predictions empirically also present empirical results difficult qmr dt network problem obtaining performance new algorithms roughly comparable jaakkola jordan algorithm

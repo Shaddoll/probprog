@@ -1,0 +1,1 @@
+abstract propose new markov chain monte carlo algorithm generalization stochastic dynamics method algorithm performs exploration state space using intrinsic geometric structure facilitating efficient sampling complex distributions applied bayesian learning neural networks algorithm found perform least well best state art method consuming considerably less time

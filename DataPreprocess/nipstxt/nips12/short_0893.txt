@@ -1,0 +1,1 @@
+abstract paper examines application reinforcement learning wireless communication problem problem requires channel utility maximized simultaneously minimizing battery usage present solution multi criteria problem able significantly reduce power consumption solution uses variable discount factor capture effects battery usage

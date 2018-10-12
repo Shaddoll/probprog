@@ -90,3 +90,5 @@ ENV/
 
 requirements.in
 mypythonfile.py
+
+.idea/

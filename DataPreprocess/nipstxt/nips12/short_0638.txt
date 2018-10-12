@@ -1,0 +1,1 @@
+abstract paper treat input selection radial basis function rbf like classifier within bayesian framework approximate posteriori distribution model coefficients input subsets samples drawn gibbs updates reversible jump moves using public datasets compare classification accuracy method conventional ard scheme datasets also used infer posteriori probabilities different input subsets
