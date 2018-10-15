@@ -5,8 +5,6 @@ import glob
 
 # from heapq import nlargest
 
-
-
 from edward.models import *
 
 txt_files = glob.glob("DataPreprocess/nipstxt/nipstoy/doc_wordID_short*.txt")
@@ -16,6 +14,7 @@ print ("number of documents, D: {}".format(D))
 N = [0] * D  # words per doc
 K = 10  # number of topics
 T = 30
+S = 500
 
 wordIds = [None] * D
 
@@ -59,15 +58,15 @@ for d in range(D):
 print("model constructed")
 
 qtheta = [None] * D
-qbeta = Empirical(tf.Variable(tf.ones([T, K, V]) / V))
+qbeta = Empirical(tf.Variable(tf.ones([S, K, V]) / V))
 qz = [None] * D
 latent_vars = {}
 latent_vars[beta] = qbeta
 training_data = {}
 for d in range(D):
-    qtheta[d] = Empirical(tf.Variable(tf.ones([T, K]) / K))
+    qtheta[d] = Empirical(tf.Variable(tf.ones([S, K]) / K))
     latent_vars[theta[d]] = qtheta[d]
-    qz[d] = Empirical(tf.Variable(tf.zeros([T, N[d]], dtype=tf.int32)))
+    qz[d] = Empirical(tf.Variable(tf.zeros([S, N[d]], dtype=tf.int32)))
     latent_vars[z[d]] = qz[d]
     training_data[w[d]] = wordIds[d]
 
@@ -93,25 +92,28 @@ for _ in range(inference.n_iter):
     inference.print_progress(info_dict)
 inference.finalize()
 
+print("infrence finished")
+
 # sample beta
 qbeta_sample = latent_vars[beta].params[-1].eval()
 
+import pickle
+pickle.dump( qbeta_sample, open( "train2.p", "wb" ) )
 
 prob = [None] * K
 for k in range(K):
     prob[k] = qbeta_sample[k, :]
-    print (len(prob[k]))
+    print(len(prob[k]))
 #
 tokens = [None] * V
-for i, id in enumerate(list(vocab)):
-    # if id not in IdtoWord:
-    #     print (id)
-    tokens[i] = IdtoWord[id]
+for key in IdtoWord:
+    tokens[key] = IdtoWord[key]
+
 # #
 tokens_probs =[None] * K
 for k in range(K):
     tokens_probs[k] =dict((t, p) for t, p in zip(tokens, prob[k]))
     newdict = sorted(tokens_probs[k], key=tokens_probs[k].get, reverse=True)[:15]
-    print ('topic %d'%k)
+    print('topic %d' % k)
     for word in newdict:
-        print (word)
+        print(word, tokens_probs[k][word])
