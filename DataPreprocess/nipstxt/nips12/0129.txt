@@ -24,7 +24,7 @@ The latter implies spontaneous division of the Hebbian cell assem-
 bly into groups of cells that fire in a cyclic manner. We invetigate 
 the behavior of distributed synchrony both by simulations and by 
 analytic calculations of the resulting synaptic distributions. 
-i Introduction 
+1 Introduction 
 The Hebbian paradigm that serves as the basis for models of associative memory is 
 often conceived as the statement that a group of excitatory neurons (the Hebbian 
 cell assembly) that are coupled synaptically to one another fire together when a 

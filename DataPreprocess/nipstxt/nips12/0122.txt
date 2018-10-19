@@ -16,7 +16,7 @@ Then we show how the precise times of spikes can be used to con-
 vey the real-valued coefficients on the basis functions quickly and 
 accurately. Finally we describe a simple simulation in which spik- 
 ing neurons learn to model an image sequence by fitting a dynamic 
-generafive model. 
+generative model. 
 I Population codes and energy landscapes 
 A perceived object is represented in the brain by the activities of many neurons, but 
 there is no general consensus on how the activities of individual neurons combine to 

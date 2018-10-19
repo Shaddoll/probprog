@@ -27,7 +27,7 @@ considerable effect on the information that the neuron can encode.
 Finally, we suggest that neurons may maximize their information 
 capacity by appropriately balancing the density of the different ion 
 channels that underlie neuronal excitability. 
-I Introduction 
+1 Introduction 
 The capacity of neurons to encode information is directly connected to the nature 
 of spike trains as a code. Namely, whether the fine temporal structure of the spike 
 train carries information or whether the fine structure of the train is mainly noise 

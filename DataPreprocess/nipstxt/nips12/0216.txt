@@ -16,7 +16,7 @@ for large deviations is used to determine the maximally achievable
 approximation quality parameterized by a minimal temperature. 
 Monte Carlo simulations support the proposed model selection cri- 
 terion by finite temperature annealing. 
-I Introduction 
+1 Introduction 
 Learning algorithms are designed to extract structure from data. Two classes of 
 algorithms have been widely discussed in the literature - supervised and unsuper- 
 vised learning. The distinction between the two classes depends on supervision or 

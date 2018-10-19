@@ -19,7 +19,7 @@ the standard Expectation Maximization algorithm, and its conver-
 gence is guaranteed. We demonstrate that this approach can be 
 applied to a large class of models in several domains, including 
 mixture models and source separation. 
-I Introduction 
+1 Introduction 
 A standard method to learn a graphical model 1 from data is maximum likelihood 
 (ML). Given a training dataset, ML estimates a single optimal value for the model 
 parameters within a fixed graph structure. However, NIL is well known for its ten- 

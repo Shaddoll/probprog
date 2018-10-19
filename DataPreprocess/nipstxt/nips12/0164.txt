@@ -28,7 +28,7 @@ demonstrate that a network of cortical neurons can learn to predict mov-
 ing stimuli and develop direction selective responses as a consequence of 
 learning. The space-time response properties of model neurons are shown 
 to be similar to those of direction selective cells in alert monkey V1. 
-1 INTRODUCTION 
+1 Introduction 
 The neocortex is characterized by an extensive system of recurrent excitatory connections 
 between neurons in a given area. The precise computational function of this massive re- 
 current excitation remains unknown. Previous modeling studies have suggested a role for 

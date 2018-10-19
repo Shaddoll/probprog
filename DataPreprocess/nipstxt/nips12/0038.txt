@@ -20,7 +20,7 @@ and amodal completion, virtual contours, grouping and shape de-
 composition are then explained through local diffusion. The system 
 eliminates combinatorial optimization and accounts for many psy- 
 chophysical results with a fixed set of parameters. 
-i Introduction 
+1 Introduction 
 Perceptual organization refers to the ability of grouping similar features in sensory 
 data. This, at a minimum, includes the operations of grouping and figure-ground 
 segregation, which refers to the process of determining relative depths of adjacent 

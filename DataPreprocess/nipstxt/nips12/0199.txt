@@ -13,7 +13,7 @@ tial anti-Hebbianplasticity can be approximated under certain conditions
 by a learning rule that depends on the time derivative of the postsynaptic 
 firing rate. Such a learning rule acts to stabilize persistent neural activity 
 patterns in recurrent neural networks. 
-1 INTRODUCTION 
+1 Introduction 
 Recent experiments have 
 demonstrated types of synaptic 
 plasticity that depend on the 

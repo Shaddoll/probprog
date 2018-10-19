@@ -44,7 +44,7 @@ sual processing stages. The standard deviation of response latency
 was smaller for early rather than late processing stages. This sup- 
 ports the hypothesis that human populational response time vari- 
 ability increases from early to late visual processing stages. 
-I Introduction 
+1 Introduction 
 In many situations, precise timing of a motor output is essential for successful task 
 completion. Somehow the reliability in the output timing is related to the reliability 
 of the underlying neural systems associated with different stages of processing. Re- 

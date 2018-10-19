@@ -19,7 +19,7 @@ be accounted for by V1 mechanisms when the size of the figure
 is small or is of a certain scale. They are a manifestation of the 
 processes of pre-attentive segmentation which detect and highlight 
 the boundaries between homogeneous image regions. 
-I Introduction 
+1 Introduction 
 Segmenting figure from ground is one of the most important visual tasks. We nei- 
 ther know how to execute it on a computer in general, nor do we know how the 
 brain executes it. Further, the medial axis of a figure has been Suggested as provid- 

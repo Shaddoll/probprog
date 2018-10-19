@@ -22,7 +22,7 @@ strating empirically that a single hidden-layer BP-SOM network can
 learn both tasks without guidance. Moreover, we analyze the net- 
 work's solution for the parity-12 task and show that its solution 
 makes use of an elegant intermediary checksum computation. 
-i Introduction 
+1 Introduction 
 Breaking up a complex task into many smaller and simpler subtasks facilitates 
 its solution. Such task decomposition has proved to be a successful technique in 
 developing algorithms and in building theories of cognition. In their study and 

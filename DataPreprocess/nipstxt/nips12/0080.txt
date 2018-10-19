@@ -23,6 +23,7 @@ dynamics to their distributed counterparts, they are much easier
 to work with and interpret. We propose a statistical formulation of 
 localist attractor net dynamics, which yields a convergence proof 
 and a mathematical interpretation of model parameters. 
+1 Introduction 
 Attractor networks map an input space, usually continuous, to a sparse output 
 space composed of a discrete set of alternatives. Attractor networks have a long 
 history in neural network research. 

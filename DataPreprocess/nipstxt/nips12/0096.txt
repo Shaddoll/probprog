@@ -23,7 +23,7 @@ tissue. Thus, our findings strongly suggest that effective associa-
 tive learning with Hebbian synapses alone is biologically implausi- 
 ble and that Hebbian synapses must be continuously remodeled by 
 neuronally-driven regulatory processes in the brain. 
-I Introduction 
+1 Introduction 
 Synapse-specific changes in synaptic efcacies, carried out by long-term potentiation 
 (LTP) and depression (LTD) are thought to underlie cortical self-organization and 
 learning in the brain. In accordance with the Hebbian paradigm, LTP and LTD 

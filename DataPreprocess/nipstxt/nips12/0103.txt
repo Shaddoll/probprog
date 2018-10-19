@@ -20,6 +20,7 @@ up about 60% of the conical volume. This prediction is in good agree-
 ment with experimental observations. A consequence of our arguments 
 is that any rearrangement of neurons that takes more wire would sacrifice 
 computational power. 
+1 Introduction
 Wiring a brain presents formidable problems because of the extremely large number of con- 
 nections: a microliter of cortex contains approximately 105 neurons, 109 synapses, and 4 
 km of axons, with 60% of the conical volume being taken up with "wire", half of this by 

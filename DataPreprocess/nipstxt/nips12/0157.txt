@@ -37,7 +37,7 @@ predicted for the nonlinear dendritic model were readily achieved
 in practice. 
 *http://lnc.usc.edu 
 158 P Poirazi and B. 144. Mel 
-Introduction 
+1 Introduction 
 Both physiological evidence and connectionist theory support the notion that in 
 the brain, memories are stored in the pattern of learned synaptic weight values. 
 Experiments in a variety of neuronal preparations however, ind, icate that the ef- 
