@@ -14,21 +14,23 @@ class LDA(object):
         yita = tf.zeros([V]) + 0.05
         self.theta = [None] * D
         self.beta = Dirichlet(yita, sample_shape=K)
+        #self.beta = Dirichlet(yita)
         self.z = [None] * D
         self.w = [None] * D
         for d in range(D):
             self.theta[d] = Dirichlet(alpha)
             self.w[d] = ParamMixture(mixing_weights=self.theta[d],
-                                     component_params={'probs': self.beta},
+                                     #component_params={'probs': self.beta},
+                                     component_params={'logits': (self.beta)},
                                      component_dist=Categorical,
                                      sample_shape=N[d],
                                      validate_args=True)
             self.z[d] = self.w[d].cat
 
     def __run_inference__(self, T):
-        self.inference.initialize(n_iter=T, n_print=10, logdir='log')
+        self.inference.initialize(n_iter=T, n_print=10, logdir='log', n_samples=100)
         tf.global_variables_initializer().run()
-        for _ in range(self.inference.n_iter):
+        for n in range(self.inference.n_iter):
             info_dict = self.inference.update()
             self.inference.print_progress(info_dict)
         self.inference.finalize()
@@ -55,9 +57,33 @@ class LDA(object):
         print("gibbs setup finished")
         self.__run_inference__(T)
 
+    def klqp(self, wordIds, T):
+        K = self.K
+        V = self.V
+        D = self.D
+        N = self.N
+        latent_vars = {}
+        training_data = {}
+        qbeta = Dirichlet(tf.nn.softplus(tf.Variable(tf.zeros([K, V])+0.05)))
+        latent_vars[self.beta] = qbeta
+        qtheta = [None] * D
+        qz = [None] * D
+        for d in range(D):
+            qtheta[d] = Dirichlet(tf.nn.softplus(tf.Variable(tf.zeros([K])+0.1)))
+            latent_vars[self.theta[d]] = qtheta[d]
+            qz[d] = Categorical((tf.nn.softmax(tf.Variable(tf.zeros([K]) + 0.1))), dtype=tf.int32, sample_shape=[N[d]])
+            latent_vars[self.z[d]] = qz[d]
+            training_data[self.w[d]] = wordIds[d]
+        self.latent_vars = latent_vars
+        self.inference = ed.KLqp(latent_vars, data=training_data)
+        print("klqp setup finished")
+        self.__run_inference__(T)
+
+
     def criticize(self, tokens):
         K = self.K
-        qbeta_sample = self.latent_vars[self.beta].params[-1].eval()
+        #qbeta_sample = self.latent_vars[self.beta].params[-1].eval()
+        qbeta_sample = self.latent_vars[self.beta].sample().eval()
         pickle.dump(qbeta_sample, open("train2.p", "wb"))
         prob = [None] * K
         for k in range(K):
