@@ -92,3 +92,4 @@ requirements.in
 mypythonfile.py
 
 .idea/
+log/
