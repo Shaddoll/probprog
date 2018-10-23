@@ -4,7 +4,7 @@ from models.lda import LDA
 import tensorflow as tf
 
 
-datafile = "DataPreprocess/nipstxt/nipstoy/doc_wordID_short*.txt"
+datafile = "DataPreprocess/nipstxt/nipstoy30/doc_wordID_short*.txt"
 txt_files = glob.glob(datafile)
 D = len(txt_files)  # number of documents
 print("number of documents, D: {}".format(D))
@@ -23,19 +23,19 @@ for file in (txt_files):
     count += 1
 IdtoWord = {}
 vocab = set()
-with open("DataPreprocess/wordToIDtoy.txt") as f:
+with open("DataPreprocess/wordToIDtoy30.txt") as f:
     for line in f:
         line = line.split()
         IdtoWord[int(line[1])] = line[0]
         vocab.add(line[0])
 V = len(vocab)  # vocabulary size21
 print("vocab size is {}".format(V))
-print("load wordToIDtoy.txt finished")
+print("load wordToIDtoy30.txt finished")
 
 model = LDA(K, V, D, N)
 print("model constructed")
-#model.gibbs(wordIds, S, T)
-model.klqp(wordIds, T)
+model.gibbs(wordIds, S, T)
+#model.klqp(wordIds, T)
 tokens = [None] * V
 for key in IdtoWord:
     tokens[key] = IdtoWord[key]

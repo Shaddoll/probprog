@@ -10,8 +10,8 @@ class LDA(object):
         self.V = V
         self.D = D
         self.N = N
-        alpha = tf.zeros([K]) + 0.1
-        yita = tf.zeros([V]) + 0.05
+        alpha = tf.ones([K])/K
+        yita = tf.ones([V])/V
         self.theta = [None] * D
         self.beta = Dirichlet(yita, sample_shape=K)
         #self.beta = Dirichlet(yita)
@@ -20,8 +20,8 @@ class LDA(object):
         for d in range(D):
             self.theta[d] = Dirichlet(alpha)
             self.w[d] = ParamMixture(mixing_weights=self.theta[d],
-                                     #component_params={'probs': self.beta},
-                                     component_params={'logits': (self.beta)},
+                                     component_params={'probs': self.beta},
+                                     #component_params={'logits': (self.beta)},
                                      component_dist=Categorical,
                                      sample_shape=N[d],
                                      validate_args=True)
