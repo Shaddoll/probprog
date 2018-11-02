@@ -1,1 +1,1 @@
-abstract bayesian mixture model necessary priori limit number components finite paper infinite gaussian mixture model presented neatly sidesteps difficult problem finding right number mixture components inference model done using efficient parameter free markov chain relies entirely gibbs sampling
+abstract bayesian mixtur model necessari priori limit number compon finit paper infinit gaussian mixtur model present neatli sidestep difficult problem find right number mixtur compon infer model done use effici paramet free markov chain reli entir gibb sampl 

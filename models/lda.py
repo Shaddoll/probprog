@@ -6,21 +6,12 @@ from edward.models import Dirichlet, ParamMixture, Categorical, Empirical
 
 class LDA(object):
     def __init__(self, K, V, D, N):
-<<<<<<< HEAD
-        self.K = K
-        self.V = V
-        self.D = D
-        self.N = N
-        alpha = tf.ones([K])/K
-        yita = tf.ones([V])/V
-=======
         self.K = K # number of topics
         self.V = V # vocabulary size
         self.D = D # number of documents
         self.N = N # number of words of each document
         alpha = tf.zeros([K]) + 0.1
         yita = tf.zeros([V]) + 0.01
->>>>>>> a87e1559b9473e00597348171c7383eade406ba8
         self.theta = [None] * D
         self.beta = Dirichlet(yita, sample_shape=K)
         self.z = [None] * D
@@ -28,12 +19,9 @@ class LDA(object):
         for d in range(D):
             self.theta[d] = Dirichlet(alpha)
             self.w[d] = ParamMixture(mixing_weights=self.theta[d],
-<<<<<<< HEAD
-                                     component_params={'probs': self.beta},
+                                     # component_params={'probs': self.beta},
                                      #component_params={'logits': (self.beta)},
-=======
                                      component_params={'probs': self.beta + 1.e-36},
->>>>>>> a87e1559b9473e00597348171c7383eade406ba8
                                      component_dist=Categorical,
                                      sample_shape=N[d],
                                      validate_args=False)
