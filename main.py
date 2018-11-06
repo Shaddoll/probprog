@@ -1,17 +1,17 @@
 import numpy as np
+import tensorflow as tf
+import edward as ed
 import glob
 from models.lda import LDA
-import tensorflow as tf
 
-"""
 datafile = "DataPreprocess/nipstxt/nipstoy20/doc_wordID_short*.txt"
 txt_files = glob.glob(datafile)
 D = len(txt_files)  # number of documents
 print("number of documents, D: {}".format(D))
 N = [0] * D  # words per doc
 K = 5  # number of topics
-T = 100
-S = 10
+T = 300
+S = 100
 wordIds = [None] * D
 count = 0  # count number of documents
 for file in (txt_files):
@@ -34,19 +34,12 @@ for key in IdtoWord:
     tokens[key] = IdtoWord[key]
 print("vocab size is {}".format(V))
 print("load wordToIDtoy.txt finished")
-"""
-import pickle
-wordIds = pickle.load(open("toy.dat", "rb"))
-tokens = list(pickle.load(open("vocab.dat", "rb")))
-K = 5
-V = len(tokens)
-D = len(wordIds)
-N = [len(wordIds[d]) for d in range(D)]
-S = 10
-T = 100
+
 
 model = LDA(K, V, D, N)
 print("model constructed")
-model.gibbs(wordIds, S, T)
+#model.gibbs(wordIds, S, T)
+#model.collapsed_gibbs(wordIds, S, T)
 #model.klqp(wordIds, S, T)
-model.criticize(tokens)
+#model.criticize(tokens)
+model.collapsed(wordIds, S, T, tokens)
