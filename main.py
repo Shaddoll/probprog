@@ -4,14 +4,14 @@ import edward as ed
 import glob
 from models.lda import LDA
 
-datafile = "DataPreprocess/nipstxt/nipstoy20/doc_wordID_short*.txt"
+datafile = "DataPreprocess/nipstxt/nipstoy/short_wordID*.txt"
 txt_files = glob.glob(datafile)
 D = len(txt_files)  # number of documents
 print("number of documents, D: {}".format(D))
 N = [0] * D  # words per doc
-K = 5  # number of topics
+K = 16  # number of topics
 T = 300
-S = 100
+S = 200
 wordIds = [None] * D
 count = 0  # count number of documents
 for file in (txt_files):
@@ -23,7 +23,7 @@ for file in (txt_files):
     count += 1
 IdtoWord = {}
 vocab = set()
-with open("DataPreprocess/wordToIDtoy20.txt") as f:
+with open("DataPreprocess/wordToID_toy.txt") as f:
     for line in f:
         line = line.split()
         IdtoWord[int(line[1])] = line[0]
