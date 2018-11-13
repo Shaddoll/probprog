@@ -2,7 +2,8 @@ import tensorflow as tf
 import edward as ed
 import numpy as np
 import pickle
-from edward.models import Dirichlet, ParamMixture, Categorical, Empirical
+from edward.models import Dirichlet, ParamMixture, Categorical, Empirical, \
+                          WishartFull, MultivariateNormalFullCovariance
 
 
 class LDA(object):
@@ -147,7 +148,8 @@ class LDA(object):
                     #ops.append(tf.scatter_add(nvk[w[d][n]], [newk], [1]))
                     ops.append(tf.scatter_nd_add(nvk, [(w[d][n], newk)], [1]))
         sess = ed.get_session()
-        tf.global_variables_initializer().run()
+        #tf.global_variables_initializer().run()
+        sess.run(tf.variables_initializer(qz + nvk + ndk))
         # print(sess.run(qz_prob))
         # print(sess.run(nvk))
         for _ in range(T):
@@ -234,3 +236,58 @@ class LDA(object):
     #     self.postlog = ed.evaluate('log_likelihood', data={x_post: wordIds})
     #     print (self.postlog)
 
+class GaussianLDA(object):
+    def __init__(self, K, D, N, nu):
+        self.K = K  # number of topics
+        self.D = D  # number of documents
+        self.N = N  # number of words of each document
+        self.nu = nu
+        self.alpha = alpha = tf.zeros([K]) + 0.1
+        mu0 = tf.constant([0.0] * nu)
+        sigma0 = tf.eye(nu)
+        self.sigma = sigma = WishartFull(df=nu, scale=sigma0, sample_shape=K)
+        sigma_inv = tf.matrix_inverse(sigma)
+        self.mu = mu = MultivariateNormalFullCovariance(loc=mu0,
+                                                        covariance_matrix=sigma_inv)
+        self.theta = theta = [None] * D
+        self.z = z = [None] * D
+        self.w = w = [None] * D
+        for d in range(D):
+            theta[d] = Dirichlet(alpha)
+            w[d] = ParamMixture(mixing_weights=theta[d],
+                                component_params={'loc': mu, 'covariance_matrix': sigma_inv},
+                                component_dist=MultivariateNormalFullCovariance,
+                                sample_shape=N[d])
+            z[d] = w[d].cat
+
+    def __run_inference__(self, T, S=None):
+        tf.global_variables_initializer().run()
+        for n in range(self.inference.n_iter):
+            info_dict = self.inference.update()
+            self.inference.print_progress(info_dict)
+        self.inference.finalize()
+
+    def gibbs(self, docs, S, T):
+        K = self.K
+        D = self.D
+        N = self.N
+        nu = self.nu
+        latent_vars = {}
+        training_data = {}
+        qmu = Empirical(tf.Variable(tf.zeros([S, K, nu])))
+        latent_vars[self.mu] = qmu
+        qsigma = Empirical(tf.Variable(tf.zeros([S, K, nu, nu])))
+        latent_vars[self.sigma] = qsigma
+        qtheta = [None] * D
+        qz = [None] * D
+        for d in range(D):
+            qtheta[d] = Empirical(tf.Variable(tf.zeros([S, K]) + 0.1))
+            latent_vars[self.theta[d]] = qtheta[d]
+            qz[d] = Empirical(tf.Variable(tf.zeros([S, N[d]], dtype=tf.int32)))
+            latent_vars[self.z[d]] = qz[d]
+            training_data[self.w[d]] = docs[d]
+        self.inference = ed.Gibbs(latent_vars, data=training_data)
+        print("gibbs setup finished")
+        self.inference.initialize(n_iter=T, n_print=1)
+        print("initialize finished")
+        self.__run_inference__(T)
