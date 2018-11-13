@@ -148,8 +148,8 @@ class LDA(object):
                     #ops.append(tf.scatter_add(nvk[w[d][n]], [newk], [1]))
                     ops.append(tf.scatter_nd_add(nvk, [(w[d][n], newk)], [1]))
         sess = ed.get_session()
-        #tf.global_variables_initializer().run()
-        sess.run(tf.variables_initializer(qz + nvk + ndk))
+        tf.global_variables_initializer().run()
+        # sess.run(tf.variables_initializer(qz + nvk + ndk))
         # print(sess.run(qz_prob))
         # print(sess.run(nvk))
         for _ in range(T):

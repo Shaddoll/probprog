@@ -3,7 +3,7 @@ from models.lda import LDA
 
 
 wordIds = pickle.load(open("toy.dat", "rb"))
-wordIds = wordIds[:50]
+wordIds = wordIds[:100]
 tokens = list(pickle.load(open("vocab.dat", "rb")))
 K = 20
 V = len(tokens)
