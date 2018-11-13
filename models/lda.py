@@ -107,8 +107,10 @@ class LDA(object):
                 _ndk[d][z] += 1
                 _nvk[w[d][n]][z] += 1
         self.qz = qz = [tf.Variable(_qz[d]) for d in range(D)]
-        self.ndk = ndk = [tf.Variable(_ndk[d]) for d in range(D)]
-        self.nvk = nvk = [tf.Variable(_nvk[v]) for v in range(V)]
+        #self.ndk = ndk = [tf.Variable(_ndk[d]) for d in range(D)]
+        self.ndk = ndk = tf.Variable(_ndk)
+        #self.nvk = nvk = [tf.Variable(_nvk[v]) for v in range(V)]
+        self.nvk = nvk = tf.Variable(_nvk)
         self.nk = nk = tf.reduce_sum(ndk, axis=0)
         # self.qz_prob = qz_prob = [(ndk[d] + alpha) * tf.gather(nvk, w[d])
         #                          / (nk + V * beta) for d in range(D)]
@@ -129,8 +131,10 @@ class LDA(object):
             for n in range(N[d]):
                 with tf.control_dependencies([ops[-1], ops[-2]]):
                     oldk = qz[d][n]
-                    ops.append(tf.scatter_sub(ndk[d], [oldk], [1]))
-                    ops.append(tf.scatter_sub(nvk[w[d][n]], [oldk], [1]))
+                    #ops.append(tf.scatter_sub(ndk[d], [oldk], [1]))
+                    ops.append(tf.scatter_nd_sub(ndk, [(d, oldk)], [1]))
+                    #ops.append(tf.scatter_sub(nvk[w[d][n]], [oldk], [1]))
+                    ops.append(tf.scatter_nd_sub(nvk, [(w[d][n], oldk)], [1]))
                 # sequentially
                 with tf.control_dependencies([ops[-1], ops[-2]]):
                     k = tf.multinomial(tf.log([qz_prob[d][n]]), 1,
@@ -138,8 +142,10 @@ class LDA(object):
                     ops.append(tf.scatter_update(qz[d], [n], k))
                 with tf.control_dependencies([ops[-1]]):
                     newk = qz[d][n]
-                    ops.append(tf.scatter_add(ndk[d], [newk], [1]))
-                    ops.append(tf.scatter_add(nvk[w[d][n]], [newk], [1]))
+                    #ops.append(tf.scatter_add(ndk[d], [newk], [1]))
+                    ops.append(tf.scatter_nd_add(ndk, [(d, newk)], [1]))
+                    #ops.append(tf.scatter_add(nvk[w[d][n]], [newk], [1]))
+                    ops.append(tf.scatter_nd_add(nvk, [(w[d][n], newk)], [1]))
         sess = ed.get_session()
         tf.global_variables_initializer().run()
         # print(sess.run(qz_prob))
@@ -216,3 +222,15 @@ class LDA(object):
             print('topic %d' % k)
             for word in newdict:
                 print(word, tokens_probs[k][word])
+
+    # def evaluate(self, wordIds):
+    #     latent_vars = {}
+    #     latent_vars[self.beta] = self.qbeta
+    #     for d in range(self.D):
+    #         latent_vars[self.theta[d]] = self.qtheta[d]
+    #         latent_vars[self.z[d]] = self.qz[d]
+    #     self.latent_vars = latent_vars
+    #     x_post = ed.copy(self.w, latent_vars)
+    #     self.postlog = ed.evaluate('log_likelihood', data={x_post: wordIds})
+    #     print (self.postlog)
+

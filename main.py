@@ -4,12 +4,20 @@ import edward as ed
 import glob
 from models.lda import LDA
 
-datafile = "DataPreprocess/nipstxt/nipstoy20/doc_wordID_short*.txt"
+## 20 documents with abstract only
+# datafile = "DataPreprocess/nipstxt/nipstoy20/doc_wordID_short*.txt"
+## All documents with nouns
+# datafile = "DataPreprocess/nipstxt/nips12nouns/doc_nounID*.txt"
+## 50 documents with nouns in the abstract
+# datafile = "DataPreprocess/nipstxt/nipstoy50/abstract_nounID*.txt"
+## all documents with nouns in the abstract
+datafile = "DataPreprocess/nipstxt/nipstoyall/abstract_nounID*.txt"
+
 txt_files = glob.glob(datafile)
 D = len(txt_files)  # number of documents
 print("number of documents, D: {}".format(D))
 N = [0] * D  # words per doc
-K = 5  # number of topics
+K = 10  # number of topics
 T = 300
 S = 100
 wordIds = [None] * D
@@ -23,7 +31,10 @@ for file in (txt_files):
     count += 1
 IdtoWord = {}
 vocab = set()
-with open("DataPreprocess/wordToIDtoy20.txt") as f:
+# with open("DataPreprocess/wordToID_short_20.txt") as f:
+# with open("DataPreprocess/nounToID.txt") as f:
+# with open("DataPreprocess/nounToID_50.txt") as f:
+with open("DataPreprocess/nounToID_abstract.txt") as f:
     for line in f:
         line = line.split()
         IdtoWord[int(line[1])] = line[0]
@@ -33,7 +44,9 @@ tokens = [None] * V
 for key in IdtoWord:
     tokens[key] = IdtoWord[key]
 print("vocab size is {}".format(V))
-print("load wordToIDtoy.txt finished")
+# print("load wordToIDtoy.txt finished")
+print("load nounToID_50.txt finished")
+
 
 
 model = LDA(K, V, D, N)
