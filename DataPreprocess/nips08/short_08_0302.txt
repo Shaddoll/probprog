@@ -1,0 +1,1 @@
+abstract consid problem line gradient descent learn gener two layer neural network analyt solut present use investig role learn rate control evolut converg learn process learn layer neural network refer modif intern paramet specifi strength interneuron coupl bring map fj implement network close possibl desir map degre success monitor gener error measur dissimilar fj

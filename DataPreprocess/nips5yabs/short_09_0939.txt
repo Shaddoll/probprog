@@ -1,0 +1,1 @@
+abstract predict lifetim dynam alloc object use improv time space effici dynam memori manag comput program barrett zorn use simpl lifetim predictor demonstr improv varieti comput program paper use decis tree lifetim predict program show significantli better predict method also advantag train use larg number featur let decis tree automat choos relev subset

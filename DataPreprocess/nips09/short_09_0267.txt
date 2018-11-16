@@ -1,0 +1,1 @@
+abstract given multidimension data set model densiti consid defin optim interpol two point done assign cost path space base two compet goal one interpol region high densiti minim arc length path function deriv euler lagrang equat extrem motion given two point desir interpol found solv boundari valu problem show interpol done effici high dimens gaussian dirichlet mixtur model

@@ -1,0 +1,1 @@
+abstract invers fisher inform matrix use natur gradient descent algorithm train singl layer multi layer perceptron discov new scheme repres fisher inform matrix stochast multi layer perceptron base scheme design algorithm comput natur gradient input dimens much larger number hidden neuron complex algorithm order confirm simul natur gradient descent learn rule effici also robust

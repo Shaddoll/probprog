@@ -1,0 +1,1 @@
+abstract compar two regular method use improv gener capabl gaussian mixtur densiti estim first method use bayesian prior paramet space deriv em expect maxim updat rule maxim posterior paramet probabl second approach appli ensembl averag densiti estim includ breiman bag recent found produc impress result classif network

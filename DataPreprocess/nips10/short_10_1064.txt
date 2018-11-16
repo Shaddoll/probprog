@@ -1,0 +1,1 @@
+abstract paper show discount mdp discount factor asymptot rate converg learn loglogt otherwis provid state action pair sampl fix probabl distribut pmin pmax ratio minimum maximum state action occup frequenc result extend converg line learn provid pmin pmin pmax becom minimum maximum state action occup frequenc correspond stationari distribut

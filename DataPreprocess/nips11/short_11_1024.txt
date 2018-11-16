@@ -1,0 +1,1 @@
+abstract order find optim control continu state space time reinforc learn rl problem approxim valu function vf particular class function call barycentr interpol establish suffici condit rl algorithm converg optim vf even use approxim model state dynam reinforc function

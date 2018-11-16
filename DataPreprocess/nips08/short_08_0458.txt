@@ -1,0 +1,1 @@
+abstract deriv smooth regular recurr network model requir robust predict perform perturb train data regular view gener first order tikhonov stabil dynam model close form express regular cover time lag simultan recurr net feedforward net onelay linear net special case success test regular number case studi found perform better standard quadrat weight decay

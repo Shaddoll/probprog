@@ -1,0 +1,1 @@
+abstract global converg homotopi method defin capabl sequenti produc larg number stationari point multi layer perceptron mean squar error surfac use algorithm larg subset stationari point two test problem found shown empir mlp neural network appear extrem ratio saddl point compar local minima even small neural network problem extrem larg number solut
