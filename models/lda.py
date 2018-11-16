@@ -3,7 +3,9 @@ import edward as ed
 import numpy as np
 import pickle
 from edward.models import Dirichlet, ParamMixture, Categorical, Empirical, \
-                          WishartFull, MultivariateNormalFullCovariance
+                          WishartCholesky, MultivariateNormalTriL, \
+                          Normal, Mixture
+ds = tf.contrib.distributions
 
 
 class LDA(object):
@@ -33,7 +35,6 @@ class LDA(object):
         for n in range(self.inference.n_iter):
             info_dict = self.inference.update()
             self.inference.print_progress(info_dict)
-            #print('\nit: {}, qbeta_var_est:\n {}'.format(n+1, self.qbeta_var.eval()))
         self.inference.finalize()
 
     def gibbs(self, wordIds, S, T):
@@ -108,9 +109,9 @@ class LDA(object):
                 _ndk[d][z] += 1
                 _nvk[w[d][n]][z] += 1
         self.qz = qz = [tf.Variable(_qz[d]) for d in range(D)]
-        #self.ndk = ndk = [tf.Variable(_ndk[d]) for d in range(D)]
+        # self.ndk = ndk = [tf.Variable(_ndk[d]) for d in range(D)]
         self.ndk = ndk = tf.Variable(_ndk)
-        #self.nvk = nvk = [tf.Variable(_nvk[v]) for v in range(V)]
+        # self.nvk = nvk = [tf.Variable(_nvk[v]) for v in range(V)]
         self.nvk = nvk = tf.Variable(_nvk)
         self.nk = nk = tf.reduce_sum(ndk, axis=0)
         # self.qz_prob = qz_prob = [(ndk[d] + alpha) * tf.gather(nvk, w[d])
@@ -132,9 +133,9 @@ class LDA(object):
             for n in range(N[d]):
                 with tf.control_dependencies([ops[-1], ops[-2]]):
                     oldk = qz[d][n]
-                    #ops.append(tf.scatter_sub(ndk[d], [oldk], [1]))
+                    # ops.append(tf.scatter_sub(ndk[d], [oldk], [1]))
                     ops.append(tf.scatter_nd_sub(ndk, [(d, oldk)], [1]))
-                    #ops.append(tf.scatter_sub(nvk[w[d][n]], [oldk], [1]))
+                    # ops.append(tf.scatter_sub(nvk[w[d][n]], [oldk], [1]))
                     ops.append(tf.scatter_nd_sub(nvk, [(w[d][n], oldk)], [1]))
                 # sequentially
                 with tf.control_dependencies([ops[-1], ops[-2]]):
@@ -143,9 +144,9 @@ class LDA(object):
                     ops.append(tf.scatter_update(qz[d], [n], k))
                 with tf.control_dependencies([ops[-1]]):
                     newk = qz[d][n]
-                    #ops.append(tf.scatter_add(ndk[d], [newk], [1]))
+                    # ops.append(tf.scatter_add(ndk[d], [newk], [1]))
                     ops.append(tf.scatter_nd_add(ndk, [(d, newk)], [1]))
-                    #ops.append(tf.scatter_add(nvk[w[d][n]], [newk], [1]))
+                    # ops.append(tf.scatter_add(nvk[w[d][n]], [newk], [1]))
                     ops.append(tf.scatter_nd_add(nvk, [(w[d][n], newk)], [1]))
         sess = ed.get_session()
         tf.global_variables_initializer().run()
@@ -202,7 +203,7 @@ class LDA(object):
         self.inference = ed.KLqp(latent_vars, data=training_data)
         print("klqp setup finished")
         optimizer = tf.train.AdamOptimizer(0.01, epsilon=1.0)
-        #optimizer = tf.train.GradientDescentOptimizer(0.001)
+        # optimizer = tf.train.GradientDescentOptimizer(0.001)
         self.inference.initialize(n_iter=T, n_print=1, n_samples=S,
                                   optimizer=optimizer, logdir='log/')
         self.__run_inference__(T, S)
@@ -236,8 +237,9 @@ class LDA(object):
     #     self.postlog = ed.evaluate('log_likelihood', data={x_post: wordIds})
     #     print (self.postlog)
 
+
 class GaussianLDA(object):
-    def __init__(self, K, D, N, nu):
+    def __init__(self, K, D, N, nu, use_param=False):
         self.K = K  # number of topics
         self.D = D  # number of documents
         self.N = N  # number of words of each document
@@ -245,20 +247,37 @@ class GaussianLDA(object):
         self.alpha = alpha = tf.zeros([K]) + 0.1
         mu0 = tf.constant([0.0] * nu)
         sigma0 = tf.eye(nu)
-        self.sigma = sigma = WishartFull(df=nu, scale=sigma0, sample_shape=K)
+        self.sigma = sigma = WishartCholesky(
+            df=nu,
+            scale=sigma0,
+            cholesky_input_output_matrices=True,
+            sample_shape=K)
         sigma_inv = tf.matrix_inverse(sigma)
-        self.mu = mu = MultivariateNormalFullCovariance(loc=mu0,
-                                                        covariance_matrix=sigma_inv)
+        self.mu = mu = MultivariateNormalTriL(
+            loc=mu0,
+            scale_tril=sigma_inv)
         self.theta = theta = [None] * D
         self.z = z = [None] * D
         self.w = w = [None] * D
         for d in range(D):
             theta[d] = Dirichlet(alpha)
-            w[d] = ParamMixture(mixing_weights=theta[d],
-                                component_params={'loc': mu, 'covariance_matrix': sigma_inv},
-                                component_dist=MultivariateNormalFullCovariance,
-                                sample_shape=N[d])
-            z[d] = w[d].cat
+            if use_param:
+                w[d] = ParamMixture(
+                    mixing_weights=theta[d],
+                    component_params={'loc': mu, 'scale_tril': sigma_inv},
+                    component_dist=MultivariateNormalTriL,
+                    sample_shape=N[d])
+                z[d] = w[d].cat
+            else:
+                z[d] = Categorical(probs=theta[d], sample_shape=N[d])
+                components = [
+                    MultivariateNormalTriL(loc=tf.gather(mu, k),
+                                           scale_tril=tf.gather(sigma_inv, k),
+                                           sample_shape=N[d])
+                    for k in range(K)]
+                w[d] = Mixture(cat=z[d],
+                               components=components,
+                               sample_shape=N[d])
 
     def __run_inference__(self, T, S=None):
         tf.global_variables_initializer().run()
@@ -286,8 +305,38 @@ class GaussianLDA(object):
             qz[d] = Empirical(tf.Variable(tf.zeros([S, N[d]], dtype=tf.int32)))
             latent_vars[self.z[d]] = qz[d]
             training_data[self.w[d]] = docs[d]
-        self.inference = ed.Gibbs(latent_vars, data=training_data)
+        self.inference = ed.MetropolisHastings(latent_vars, data=training_data)
         print("gibbs setup finished")
         self.inference.initialize(n_iter=T, n_print=1)
         print("initialize finished")
+        self.__run_inference__(T)
+
+    def klqp(self, docs, S, T):
+        K = self.K
+        D = self.D
+        nu = self.nu
+        self.latent_vars = latent_vars = {}
+        training_data = {}
+        qmu = Normal(
+            loc=tf.Variable(tf.random_normal([K, nu])),
+            scale=tf.nn.softplus(tf.Variable(tf.zeros([K, nu]))))
+        latent_vars[self.mu] = qmu
+        qpsi0 = tf.Variable(tf.random_normal([K, nu, nu]))
+        Ltril = tf.linalg.LinearOperatorLowerTriangular(
+            ds.matrix_diag_transform(
+                qpsi0,
+                transform=tf.nn.softplus)).to_dense()
+        qsigma = WishartCholesky(
+            df=tf.ones([K])*nu,
+            scale=Ltril,
+            cholesky_input_output_matrices=True)
+        latent_vars[self.sigma] = qsigma
+        for d in range(D):
+            training_data[self.w[d]] = docs[d]
+        self.qpsi0=qpsi0
+        self.Ltril=Ltril
+        self.qmu=qmu
+        self.qsigma=qsigma
+        self.inference = ed.KLqp(latent_vars, data=training_data)
+        self.inference.initialize(n_iter=T, n_print=10, n_samples=S)
         self.__run_inference__(T)
