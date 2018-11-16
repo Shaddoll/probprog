@@ -1,1 +1,0 @@
-abstract propos analyz class actor critic algorithm simul base optim markov decis process parameter famili random stationari polici two time scale algorithm critic use td learn linear approxim architectur actor updat approxim gradient direct base inform provid critic show featur critic span subspac prescrib choic parameter actor conclud discuss converg properti open problem 

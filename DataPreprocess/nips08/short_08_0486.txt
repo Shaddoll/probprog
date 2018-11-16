@@ -1,0 +1,1 @@
+abstract develop refin mean field approxim infer learn probabilist neural network mean field theori unlik assum unit behav independ degre freedom instead exploit principl way exist larg substructur comput tractabl illustr advantag framework show incorpor weak higher order interact first order hidden markov model treat correct first order structur within mean field theori

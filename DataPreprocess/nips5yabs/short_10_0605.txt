@@ -1,0 +1,1 @@
+abstract propag algorithm invert learn neural network gener model sensori input process invert model gener pattern hidden variabl use top connect invers process iter util neg feedback loop depend error signal propag bottom connect error signal also use learn gener model exampl algorithm benchmark princip compon analysi experi imag handwritten digit

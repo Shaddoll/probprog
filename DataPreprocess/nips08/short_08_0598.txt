@@ -1,0 +1,1 @@
+abstract practic method bayesian train feed forward neural network use sophist mont carlo method present evalu reason small amount comput time approach outperform state art method datalimit task real world domain

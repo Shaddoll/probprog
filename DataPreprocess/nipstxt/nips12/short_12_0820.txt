@@ -1,0 +1,1 @@
+abstract three dimension motion human underdetermin observ limit singl camera due inher ambigu video present system reconstruct motion human subject singl camera video reli prior knowledg human motion learn train data resolv ambigu initi track reconstruct automat show result sever video sequenc result show power treat bodi track infer problem

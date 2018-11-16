@@ -1,0 +1,1 @@
+abstract work investig represent induct capabl time delay neural network tdnn gener two subclass tdnn delay input idnn includ delay hidden unit hdnn architectur capabl repres class languag definit memori machin dmm languag delay hidden unit hdnn help outperform idnn problem compos repeat featur short time window

@@ -1,0 +1,1 @@
+abstract perceptron decis tree known linear machin dt etc analys order data depend structur risk minlml ation appli data depend analysi perform indic choos maxim margin hyperplanc decis node improv gener analysi use novel techniqu bound gener error term margin individu node experi perform real data set confirm valid approach

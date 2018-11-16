@@ -1,1 +1,0 @@
-abstract new method multivari densiti estim develop base support vector method svm solut invers ill pose problem solut form mixtur densiti method gaussian kernel compar favor parzen method gaussian mixtur model method synthet data achiev accur estim densiti dimens 

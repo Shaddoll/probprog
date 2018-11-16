@@ -1,0 +1,1 @@
+abstract neural one unit learn rule problem independ compon analysi ica blind sourc separ introduc new algorithm everi ica neuron develop separ find one independ compon learn rule use simpl constrain hebbian anti hebbian learn decorrel feedback may ad speed converg stochast gradient descent rule novel comput effici fix point algorithm introduc

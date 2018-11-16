@@ -1,1 +1,0 @@
-abstract local linear regress perform well mani low dimension forecast problem high dimension space perform typic decay due well known curs dimension possibl way approach problem vari shape weight kernel work suggest new data driven method estim optim kernel shape experi use artifici gener data set data uc irvin repositori show benefit kernel shape 

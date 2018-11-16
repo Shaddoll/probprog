@@ -1,1 +1,0 @@
-abstract give necessari suffici condit uniqu support vector solut problem pattern recognit regress estim gener class cost function show solut uniqu support vector necessarili bound give simpl exampl non uniqu solut note uniqu primal dual solut necessarili impli uniqu dual primal solut show comput threshold solut uniqu support vector bound case usual method determin work 

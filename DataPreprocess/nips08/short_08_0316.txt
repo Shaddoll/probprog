@@ -1,0 +1,1 @@
+abstract show singl neuron logist function transfer function number local minima error function base squar loss grow exponenti dimens

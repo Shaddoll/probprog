@@ -1,0 +1,1 @@
+abstract paper show neural network use continu activ function vc dimens least larg squar number weight result settl long stand open question name whether well known log bound known hard threshold net also held gener sigmoid net implic number sampl need valid gener discuss

@@ -1,0 +1,1 @@
+abstract stochast line learn faster batch learn howevex late time learn rate must anneal remov nois present stochast weight updat anneal phase tile converg rate mean squar best proport number input present altern increas batch size remov nois paper explor converg lm use small fix batch size adapt batch size show best adapt batch schedul exponenti rate converg anneal best proport

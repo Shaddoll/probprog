@@ -1,0 +1,1 @@
+abstract adapt back propag algorithm studi compar gradient descent standard back propag line learn two layer neural network arbitrari number hidden unit within statist mechan framework numer studi rigor analysi show adapt back propag method result faster train break symmetri hidden unit effici provid faster converg optim gener gradient descent

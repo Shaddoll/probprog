@@ -1,0 +1,1 @@
+abstract introduc algorithm estim valu function set test point xt xt ra given set train point xl yl xt yt without estim intermedi step regress function demonstr direct transducr way estim valu regress classif pattern recognit accur tradit one base two step first estim function calcul valu function point interest
