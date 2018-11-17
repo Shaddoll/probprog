@@ -42,6 +42,7 @@ print("vocab size is {}".format(V))
 print("load nounToID_50.txt finished")
 """
 
+D = 20
 
 model = GaussianLDA(K, D, N, nu)
 print("model constructed")

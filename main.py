@@ -4,13 +4,13 @@ import edward as ed
 import glob
 from models.lda import LDA
 
-## 20 documents with abstract only
+# 20 documents with abstract only
 # datafile = "DataPreprocess/nipstxt/nipstoy20/doc_wordID_short*.txt"
-## All documents with nouns
+# All documents with nouns
 # datafile = "DataPreprocess/nipstxt/nips12nouns/doc_nounID*.txt"
-## 50 documents with nouns in the abstract
+# 50 documents with nouns in the abstract
 # datafile = "DataPreprocess/nipstxt/nipstoy50/abstract_nounID*.txt"
-## all documents with nouns in the abstract
+# all documents with nouns in the abstract
 # datafile = "DataPreprocess/nipstxt/nipstoyall/abstract_nounID*.txt"
 # datafile = "DataPreprocess/nipstxt/nipstoy/short_wordID*.txt"
 datafile = "DataPreprocess/nips2yabs/doc_short_wID*.txt"
@@ -48,7 +48,6 @@ for key in IdtoWord:
 print("vocab size is {}".format(V))
 # print("load wordToIDtoy.txt finished")
 print("load wordToID_2y.txt finished")
-
 
 
 model = LDA(K, V, D, N)

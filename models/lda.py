@@ -338,5 +338,5 @@ class GaussianLDA(object):
         self.qmu=qmu
         self.qsigma=qsigma
         self.inference = ed.KLqp(latent_vars, data=training_data)
-        self.inference.initialize(n_iter=T, n_print=10, n_samples=S)
+        self.inference.initialize(n_iter=T, n_print=10, n_samples=S, logdir='log/')
         self.__run_inference__(T)
