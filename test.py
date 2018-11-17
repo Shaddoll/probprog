@@ -4,7 +4,7 @@ import edward as ed
 import glob
 from models.lda import GaussianLDA
 
-datafile = "DataPreprocess/nipstxt/nips12we20/short_wordembed_*.txt"
+datafile = "DataPreprocess/nips12we25/short_wordembed_*.txt"
 txt_files = glob.glob(datafile)
 D = len(txt_files)  # number of documents
 print("number of documents, D: {}".format(D))
@@ -18,12 +18,13 @@ for file in (txt_files):
     with open(file, 'rt', encoding="ISO-8859-1") as f:
         vec = []
         for line in f:
-            vec.append(list(map(float, line.split()[:25])))
+            vec.append(list(map(float, line.split())))
         N[count] = len(vec)
         wordIds[count] = vec
     print("load" + file + "finished")
     count += 1
 nu = len(wordIds[0][0])
+print("dimension:", nu)
 """
 IdtoWord = {}
 vocab = set()
