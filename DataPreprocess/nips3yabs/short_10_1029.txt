@@ -1,0 +1,1 @@
+abstract paper concern problem reinforc learn rl continu state space time stochast control problem state hamilton jacobi bellman equat satisfi valu function use finit differ method design converg approxim scheme propos rl algorithm base scheme prove converg optim solut

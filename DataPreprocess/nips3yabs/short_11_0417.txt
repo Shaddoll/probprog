@@ -1,0 +1,1 @@
+abstract examin problem estim paramet multinomi distribut larg number discret outcom appear train data analyz problem bayesian perspect develop hierarch prior incorpor assumpt observ outcom constitut small subset possibl outcom show effici perform exact infer form hierarch prior compar standard approach

@@ -13,7 +13,7 @@ from models.lda import LDA
 ## all documents with nouns in the abstract
 # datafile = "DataPreprocess/nipstxt/nipstoyall/abstract_nounID*.txt"
 # datafile = "DataPreprocess/nipstxt/nipstoy/short_wordID*.txt"
-datafile = "DataPreprocess/nips2yabs/doc_short_wID*.txt"
+datafile = "DataPreprocess/nips3yabs/doc_short_wID*.txt"
 txt_files = glob.glob(datafile)
 D = len(txt_files)  # number of documents
 print("number of documents, D: {}".format(D))
@@ -36,7 +36,7 @@ vocab = set()
 # with open("DataPreprocess/nounToID.txt") as f:
 # with open("DataPreprocess/nounToID_50.txt") as f:
 # with open("DataPreprocess/nounToID_abstract.txt") as f:
-with open("DataPreprocess/wordToID_2y.txt") as f:
+with open("DataPreprocess/wordToID_3y.txt") as f:
     for line in f:
         line = line.split()
         IdtoWord[int(line[1])] = line[0]
@@ -47,7 +47,7 @@ for key in IdtoWord:
     tokens[key] = IdtoWord[key]
 print("vocab size is {}".format(V))
 # print("load wordToIDtoy.txt finished")
-print("load wordToID_2y.txt finished")
+print("load wordToID_3y.txt finished")
 
 
 
