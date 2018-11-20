@@ -2,6 +2,7 @@ import tensorflow as tf
 import edward as ed
 import numpy as np
 import pickle
+from utils import util
 from edward.models import Dirichlet, ParamMixture, Categorical, Empirical, \
                           WishartCholesky, MultivariateNormalTriL, \
                           Normal, Mixture
@@ -321,7 +322,8 @@ class GaussianLDA(object):
             loc=tf.Variable(tf.random_normal([K, nu])),
             scale=tf.nn.softplus(tf.Variable(tf.zeros([K, nu]))))
         latent_vars[self.mu] = qmu
-        qpsi0 = tf.Variable(tf.random_normal([K, nu, nu]))
+        #qpsi0 = tf.Variable(tf.random_normal([K, nu, nu]))
+        qpsi0 = tf.Variable(tf.eye(nu, batch_shape=[K]))
         Ltril = tf.linalg.LinearOperatorLowerTriangular(
             ds.matrix_diag_transform(
                 qpsi0,
@@ -333,10 +335,39 @@ class GaussianLDA(object):
         latent_vars[self.sigma] = qsigma
         for d in range(D):
             training_data[self.w[d]] = docs[d]
-        self.qpsi0=qpsi0
-        self.Ltril=Ltril
-        self.qmu=qmu
-        self.qsigma=qsigma
+        self.qmu = qmu
+        self.qsigma_inv = qsigma_inv = tf.matrix_inverse(qsigma)
+        self.qw = MultivariateNormalTriL(loc=qmu, scale_tril=qsigma_inv)
         self.inference = ed.KLqp(latent_vars, data=training_data)
         self.inference.initialize(n_iter=T, n_print=10, n_samples=S, logdir='log/')
         self.__run_inference__(T)
+
+    def getTopWords(self, wordVec, tokens):
+        K = self.K
+        V = len(wordVec)
+        logprobs = [None] * V
+        for i in range(V):
+            logprobs[i] = self.qw.log_prob(wordVec[i])
+        self.qbeta = qbeta = tf.convert_to_tensor(logprobs)
+        qbeta_sample = qbeta.eval()
+        prob = [None] * K
+        for k in range(K):
+            prob[k] = qbeta_sample[:, k]
+        self.tokens_probs = tokens_probs = [None] * K
+        self.top_words = [None] * K
+        for k in range(K):
+            tokens_probs[k] = dict((t, p) for t, p in zip(range(V), prob[k]))
+            newdict = sorted(tokens_probs[k],
+                             key=tokens_probs[k].get,
+                             reverse=True)[:15]
+            self.top_words[k] = newdict
+            print('topic %d' % k)
+            for Id in newdict:
+                print(tokens[Id], tokens_probs[k][Id])
+
+    def getPMI(self, comatrix):
+        K = self.K
+        self.pmis = pmis = [None] * K
+        for k in range(K):
+            pmis[k] = util.pmi(comatrix, self.top_words[k])
+            print('topic %d pmi: %f' % (k, pmis[k]))

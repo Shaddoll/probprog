@@ -35,15 +35,21 @@ def cooccurence(corpus, vocabs, window_size):
     return result
 
 
-def pmi(comatrix, words, wordToId):
+def pmi(comatrix, words, wordToId=None):
     N = comatrix.sum()
     n = len(words)
     cnt = 0.0
     result = 0.0
     for i in range(n):
-        a = wordToId[words[i]]
+        if wordToId is None:
+            a = words[i]
+        else:
+            a = wordToId[words[i]]
         for j in range(i + 1, n):
-            b = wordToId[words[j]]
+            if wordToId is None:
+                b = words[j]
+            else:
+                b = wordToId[words[j]]
             if comatrix[a][b] > 0:
                 result += math.log2(comatrix[a][b])
                 result += math.log2(N)

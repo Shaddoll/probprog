@@ -9,7 +9,7 @@ txt_files = glob.glob(datafile)
 D = len(txt_files)  # number of documents
 print("number of documents, D: {}".format(D))
 N = [0] * D  # words per doc
-K = 5  # number of topics
+K = 9  # number of topics
 T = 500
 S = 5
 wordIds = [None] * D
@@ -25,25 +25,29 @@ for file in (txt_files):
     count += 1
 nu = len(wordIds[0][0])
 print("dimension:", nu)
-"""
-IdtoWord = {}
-vocab = set()
-with open("DataPreprocess/word_vectors.txt") as f:
+
+wordToId = dict()
+tokens = []
+with open("DataPreprocess/wordToID.txt") as f:
     for line in f:
         line = line.split()
-        IdtoWord[int(line[1])] = line[0]
-        vocab.add(line[0])
-V = len(vocab)  # vocabulary size21
-tokens = [None] * V
-for key in IdtoWord:
-    tokens[key] = IdtoWord[key]
+        wordToId[line[0]] = len(tokens)
+        tokens.append(line[0])
+V = len(tokens)  # vocabulary size21
 print("vocab size is {}".format(V))
-# print("load wordToIDtoy.txt finished")
-print("load nounToID_50.txt finished")
-"""
+print("load wordId finished")
 
-D = 20
+wordVec = [None] * V
+with open("DataPreprocess/word_vectors_25.txt") as f:
+    for line in f:
+        line = line.split()
+        if line[0] in wordToId:
+            wordVec[wordToId[line[0]]] = list(map(float, line[1:]))
+print("load word embeddings finished")
 
+D = 1
 model = GaussianLDA(K, D, N, nu)
 print("model constructed")
 model.klqp(wordIds, S, T)
+print("inference finished")
+model.getTopWords(wordVec[:200], tokens)
