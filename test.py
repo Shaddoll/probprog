@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 import edward as ed
 import glob
+import pickle
 from models.lda import GaussianLDA
 
 datafile = "DataPreprocess/nips12we25/short_wordembed_*.txt"
@@ -28,7 +29,7 @@ print("dimension:", nu)
 
 wordToId = dict()
 tokens = []
-with open("DataPreprocess/wordToID.txt") as f:
+with open("DataPreprocess/wordToID_short_12.txt") as f:
     for line in f:
         line = line.split()
         wordToId[line[0]] = len(tokens)
@@ -45,9 +46,11 @@ with open("DataPreprocess/word_vectors_25.txt") as f:
             wordVec[wordToId[line[0]]] = list(map(float, line[1:]))
 print("load word embeddings finished")
 
-D = 1
 model = GaussianLDA(K, D, N, nu)
 print("model constructed")
 model.klqp(wordIds, S, T)
 print("inference finished")
-model.getTopWords(wordVec[:200], tokens)
+model.getTopWords(wordVec, tokens)
+print("get top words finished")
+comatrix = pickle.load(open("DataPreprocess/comatrix1y.pickle", "rb"))
+model.getPMI(comatrix)
