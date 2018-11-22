@@ -5,7 +5,7 @@ import pickle
 from utils import util
 from edward.models import Dirichlet, ParamMixture, Categorical, Empirical, \
                           WishartCholesky, MultivariateNormalTriL, \
-                          Normal, Mixture
+                          Normal, Mixture, InverseGamma, MultivariateNormalDiag
 ds = tf.contrib.distributions
 
 
@@ -312,7 +312,7 @@ class GaussianLDA(object):
         print("initialize finished")
         self.__run_inference__(T)
 
-    def klqp(self, docs, S, T):
+    def klqp(self, docs, S, T, wordVec):
         K = self.K
         D = self.D
         nu = self.nu
@@ -338,6 +338,12 @@ class GaussianLDA(object):
         self.qmu = qmu
         self.qsigma_inv = qsigma_inv = tf.matrix_inverse(qsigma)
         self.qw = MultivariateNormalTriL(loc=qmu, scale_tril=qsigma_inv)
+        V = len(wordVec)
+        logprobs = [None] * V
+        for i in range(V):
+            print("logprob:", i)
+            logprobs[i] = self.qw.log_prob(wordVec[i])
+        self.qbeta = tf.convert_to_tensor(logprobs)
         self.inference = ed.KLqp(latent_vars, data=training_data)
         self.inference.initialize(n_iter=T, n_print=10, n_samples=S, logdir='log/')
         self.__run_inference__(T)
@@ -345,10 +351,104 @@ class GaussianLDA(object):
     def getTopWords(self, wordVec, tokens):
         K = self.K
         V = len(wordVec)
+        qbeta = self.qbeta
+        qbeta_sample = qbeta.eval()
+        prob = [None] * K
+        for k in range(K):
+            prob[k] = qbeta_sample[:, k]
+        self.tokens_probs = tokens_probs = [None] * K
+        self.top_words = [None] * K
+        for k in range(K):
+            tokens_probs[k] = dict((t, p) for t, p in zip(range(V), prob[k]))
+            newdict = sorted(tokens_probs[k],
+                             key=tokens_probs[k].get,
+                             reverse=True)[:15]
+            self.top_words[k] = newdict
+            print('topic %d' % k)
+            for Id in newdict:
+                print(tokens[Id], tokens_probs[k][Id])
+
+    def getPMI(self, comatrix):
+        K = self.K
+        self.pmis = pmis = [None] * K
+        for k in range(K):
+            pmis[k] = util.pmi(comatrix, self.top_words[k])
+            print('topic %d pmi: %f' % (k, pmis[k]))
+
+
+class SimpleGaussianLDA(object):
+    def __init__(self, K, D, N, nu, use_param=False):
+        self.K = K  # number of topics
+        self.D = D  # number of documents
+        self.N = N  # number of words of each document
+        self.nu = nu
+        self.alpha = alpha = tf.zeros([K]) + 0.1
+        self.sigmasq = InverseGamma(tf.ones(nu), tf.ones(nu), sample_shape=K)
+        self.sigma = sigma = tf.sqrt(self.sigmasq)
+        #self.mu = mu = MultivariateNormalDiag(mu0, sigma)
+        self.mu = mu = Normal(tf.zeros(nu), tf.ones(nu), sample_shape=K)
+        self.theta = theta = [None] * D
+        self.z = z = [None] * D
+        self.w = w = [None] * D
+        for d in range(D):
+            theta[d] = Dirichlet(alpha)
+            if use_param:
+                w[d] = ParamMixture(
+                    mixing_weights=theta[d],
+                    component_params={'loc': mu, 'scale_diag': sigma},
+                    component_dist=MultivariateNormalDiag,
+                    sample_shape=N[d])
+                z[d] = w[d].cat
+            else:
+                z[d] = Categorical(probs=theta[d], sample_shape=N[d])
+                components = [
+                    MultivariateNormalDiag(loc=tf.gather(mu, k),
+                                           scale_diag=tf.gather(self.sigmasq, k),
+                                           sample_shape=N[d])
+                    for k in range(K)]
+                w[d] = Mixture(cat=z[d],
+                               components=components,
+                               sample_shape=N[d])
+
+    def __run_inference__(self, T, S=None):
+        tf.global_variables_initializer().run()
+        for n in range(self.inference.n_iter):
+            info_dict = self.inference.update()
+            self.inference.print_progress(info_dict)
+        self.inference.finalize()
+
+    def klqp(self, docs, S, T, wordVec):
+        K = self.K
+        D = self.D
+        nu = self.nu
+        self.latent_vars = latent_vars = {}
+        training_data = {}
+        qmu = Normal(
+            loc=tf.Variable(tf.random_normal([K, nu])),
+            scale=tf.nn.softplus(tf.Variable(tf.zeros([K, nu]))))
+        latent_vars[self.mu] = qmu
+        qsigmasq = InverseGamma(tf.nn.softplus(tf.Variable(tf.zeros([K, nu]))),
+                                tf.nn.softplus(tf.Variable(tf.zeros([K, nu]))))
+        latent_vars[self.sigmasq] = qsigmasq
+        for d in range(D):
+            training_data[self.w[d]] = docs[d]
+        self.qmu = qmu
+        #self.qsigma = qsigma = tf.sqrt(qsigmasq)
+        self.qw = MultivariateNormalDiag(loc=qmu, scale_diag=qsigmasq)
+        V = len(wordVec)
         logprobs = [None] * V
         for i in range(V):
+            print("logprob:", i)
             logprobs[i] = self.qw.log_prob(wordVec[i])
-        self.qbeta = qbeta = tf.convert_to_tensor(logprobs)
+        self.qbeta = tf.convert_to_tensor(logprobs)
+        self.inference = ed.KLqp(latent_vars, data=training_data)
+        self.inference.initialize(n_iter=T, n_print=10, n_samples=S, logdir='log/')
+        self.__run_inference__(T)
+
+    def getTopWords(self, wordVec, tokens):
+        K = self.K
+        V = len(wordVec)
+        qbeta = self.qbeta
         qbeta_sample = qbeta.eval()
         prob = [None] * K
         for k in range(K):

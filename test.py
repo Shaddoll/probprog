@@ -3,15 +3,17 @@ import tensorflow as tf
 import edward as ed
 import glob
 import pickle
-from models.lda import GaussianLDA
+from models.lda import SimpleGaussianLDA
+import time
 
+t1 = time.time()
 datafile = "DataPreprocess/nips12we25/short_wordembed_*.txt"
 txt_files = glob.glob(datafile)
 D = len(txt_files)  # number of documents
 print("number of documents, D: {}".format(D))
 N = [0] * D  # words per doc
 K = 9  # number of topics
-T = 500
+T = 1500
 S = 5
 wordIds = [None] * D
 count = 0  # count number of documents
@@ -46,11 +48,14 @@ with open("DataPreprocess/word_vectors_25.txt") as f:
             wordVec[wordToId[line[0]]] = list(map(float, line[1:]))
 print("load word embeddings finished")
 
-model = GaussianLDA(K, D, N, nu)
+model = SimpleGaussianLDA(K, D, N, nu)
 print("model constructed")
-model.klqp(wordIds, S, T)
+model.klqp(wordIds, S, T, wordVec)
 print("inference finished")
+print(time.time() - t1)
 model.getTopWords(wordVec, tokens)
 print("get top words finished")
+print(time.time() - t1)
 comatrix = pickle.load(open("DataPreprocess/comatrix1y.pickle", "rb"))
 model.getPMI(comatrix)
+print(time.time() - t1)
