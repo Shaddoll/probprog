@@ -3,7 +3,7 @@ import tensorflow as tf
 import edward as ed
 import glob
 import pickle
-from models.lda import SimpleGaussianLDA
+from models.lda import GaussianLDA
 import time
 
 t1 = time.time()
@@ -47,8 +47,9 @@ with open("DataPreprocess/word_vectors_25.txt") as f:
         if line[0] in wordToId:
             wordVec[wordToId[line[0]]] = list(map(float, line[1:]))
 print("load word embeddings finished")
+D=50
 
-model = SimpleGaussianLDA(K, D, N, nu)
+model = GaussianLDA(K, D, N, nu)
 print("model constructed")
 model.klqp(wordIds, S, T, wordVec)
 print("inference finished")

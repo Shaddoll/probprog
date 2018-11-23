@@ -253,10 +253,11 @@ class GaussianLDA(object):
             scale=sigma0,
             cholesky_input_output_matrices=True,
             sample_shape=K)
-        sigma_inv = tf.matrix_inverse(sigma)
-        self.mu = mu = MultivariateNormalTriL(
-            loc=mu0,
-            scale_tril=sigma_inv)
+        #sigma_inv = tf.matrix_inverse(sigma)
+        #self.mu = mu = MultivariateNormalTriL(
+        #    loc=mu0,
+        #    scale_tril=sigma)
+        self.mu = mu = Normal(mu0, tf.ones(nu), sample_shape=K)
         self.theta = theta = [None] * D
         self.z = z = [None] * D
         self.w = w = [None] * D
@@ -265,7 +266,7 @@ class GaussianLDA(object):
             if use_param:
                 w[d] = ParamMixture(
                     mixing_weights=theta[d],
-                    component_params={'loc': mu, 'scale_tril': sigma_inv},
+                    component_params={'loc': mu, 'scale_tril': sigma},
                     component_dist=MultivariateNormalTriL,
                     sample_shape=N[d])
                 z[d] = w[d].cat
@@ -273,7 +274,7 @@ class GaussianLDA(object):
                 z[d] = Categorical(probs=theta[d], sample_shape=N[d])
                 components = [
                     MultivariateNormalTriL(loc=tf.gather(mu, k),
-                                           scale_tril=tf.gather(sigma_inv, k),
+                                           scale_tril=tf.gather(sigma, k),
                                            sample_shape=N[d])
                     for k in range(K)]
                 w[d] = Mixture(cat=z[d],
@@ -336,8 +337,8 @@ class GaussianLDA(object):
         for d in range(D):
             training_data[self.w[d]] = docs[d]
         self.qmu = qmu
-        self.qsigma_inv = qsigma_inv = tf.matrix_inverse(qsigma)
-        self.qw = MultivariateNormalTriL(loc=qmu, scale_tril=qsigma_inv)
+        #self.qsigma_inv = qsigma_inv = tf.matrix_inverse(qsigma)
+        self.qw = MultivariateNormalTriL(loc=qmu, scale_tril=qsigma)
         V = len(wordVec)
         logprobs = [None] * V
         for i in range(V):
