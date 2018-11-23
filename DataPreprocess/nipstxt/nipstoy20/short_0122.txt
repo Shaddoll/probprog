@@ -1,1 +1,0 @@
-abstract first show represent sharp posterior probability distributions using real valued coefficients broadly tuned basis functions show precise times spikes used convey real valued coefficients basis functions quickly accurately finally describe simple simulation spiking neurons learn model image sequence fitting dynamic generative model
