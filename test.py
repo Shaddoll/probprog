@@ -49,7 +49,7 @@ with open("DataPreprocess/word_vectors_25.txt") as f:
         if line[0] in wordToId:
             wordVec[wordToId[line[0]]] = list(map(float, line[1:]))
 print("load word embeddings finished")
-D=20
+#D=20
 
 model = GaussianLDA(K, D, N, nu)
 print("model constructed")
