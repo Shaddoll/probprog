@@ -1,0 +1,9 @@
+{
+  "gem.py::FLAKE8": true,
+  "lda.py::FLAKE8": true,
+  "main.py::FLAKE8": true,
+  "models/lda.py::FLAKE8": true,
+  "models/main_cavi.py::FLAKE8": true,
+  "src/lda.py::FLAKE8": true,
+  "test.py::FLAKE8": true
+}

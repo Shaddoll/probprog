@@ -1,0 +1,14 @@
+[
+  "gem.py::FLAKE8",
+  "lda.py::FLAKE8",
+  "main.py::FLAKE8",
+  "news.py::FLAKE8",
+  "test.py::FLAKE8",
+  "models/lda.py::FLAKE8",
+  "models/main_cavi.py::FLAKE8",
+  "src/lda.py::FLAKE8",
+  "src/utils/plot.py::FLAKE8",
+  "src/utils/util.py::FLAKE8",
+  "utils/plot.py::FLAKE8",
+  "utils/util.py::FLAKE8"
+]
