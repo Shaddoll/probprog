@@ -13,7 +13,7 @@ D = len(txt_files)  # number of documents
 print("number of documents, D: {}".format(D))
 N = [0] * D  # words per doc
 K = 9  # number of topics
-T = 1500
+T = 7500
 S = 5
 wordIds = [None] * D
 count = 0  # count number of documents
@@ -31,6 +31,7 @@ print("dimension:", nu)
 
 wordToId = dict()
 tokens = []
+#with open("DataPreprocess/wordToID_short_12_20.txt") as f:
 with open("DataPreprocess/wordToID_short_12.txt") as f:
     for line in f:
         line = line.split()
@@ -41,6 +42,7 @@ print("vocab size is {}".format(V))
 print("load wordId finished")
 
 wordVec = [None] * V
+#with open("DataPreprocess/we_12_20.txt") as f:
 with open("DataPreprocess/word_vectors_25.txt") as f:
     for line in f:
         line = line.split()
@@ -48,6 +50,8 @@ with open("DataPreprocess/word_vectors_25.txt") as f:
             wordVec[wordToId[line[0]]] = list(map(float, line[1:]))
 print("load word embeddings finished")
 # D=50
+
+# D=20
 
 model = GaussianLDA(K, D, N, nu)
 print("model constructed")
@@ -57,6 +61,7 @@ print(time.time() - t1)
 model.getTopWords(wordVec, tokens)
 print("get top words finished")
 print(time.time() - t1)
+#comatrix = pickle.load(open("20abstract1yearAll.pickle", "rb"))
 comatrix = pickle.load(open("DataPreprocess/comatrix1y.pickle", "rb"))
 model.getPMI(comatrix)
 print(time.time() - t1)
