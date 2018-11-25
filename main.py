@@ -1,8 +1,10 @@
 import numpy as np
-import tensorflow as tf
-import edward as ed
 import glob
 from models.lda import LDA
+import time
+import pickle
+
+t1 = time.time()
 
 # 20 documents with abstract only
 # datafile = "DataPreprocess/nipstxt/nipstoy20/doc_wordID_short*.txt"
@@ -13,7 +15,7 @@ from models.lda import LDA
 # all documents with nouns in the abstract
 # datafile = "DataPreprocess/nipstxt/nipstoyall/abstract_nounID*.txt"
 # datafile = "DataPreprocess/nipstxt/nipstoy/short_wordID*.txt"
-datafile = "DataPreprocess/nips3yabs/doc_short_wID*.txt"
+datafile = "DataPreprocess/nipstxt/nipstoy20/doc_short_wID*.txt"
 txt_files = glob.glob(datafile)
 D = len(txt_files)  # number of documents
 print("number of documents, D: {}".format(D))
@@ -36,7 +38,7 @@ vocab = set()
 # with open("DataPreprocess/nounToID.txt") as f:
 # with open("DataPreprocess/nounToID_50.txt") as f:
 # with open("DataPreprocess/nounToID_abstract.txt") as f:
-with open("DataPreprocess/wordToID_3y.txt") as f:
+with open("DataPreprocess/wordToID_short_12_20.txt") as f:
     for line in f:
         line = line.split()
         IdtoWord[int(line[1])] = line[0]
@@ -52,8 +54,9 @@ print("load wordToID_3y.txt finished")
 
 model = LDA(K, V, D, N)
 print("model constructed")
-#model.gibbs(wordIds, S, T)
-#model.collapsed_gibbs(wordIds, S, T)
-#model.klqp(wordIds, S, T)
-#model.criticize(tokens)
 model.collapsed(wordIds, S, T, tokens)
+print("inference finished")
+print(time.time() - t1)
+model.getTopWords(tokens)
+comatrix = pickle.load(open("20abstract1yearAll.pickle", "rb"))
+model.getPMI(comatrix)

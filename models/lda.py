@@ -1,7 +1,6 @@
 import tensorflow as tf
 import edward as ed
 import numpy as np
-import pickle
 from utils import util
 from edward.models import Dirichlet, ParamMixture, Categorical, Empirical, \
                           WishartCholesky, MultivariateNormalTriL, \
@@ -60,6 +59,7 @@ class LDA(object):
         print("gibbs setup finished")
         self.inference.initialize(n_iter=T, n_print=1)
         self.__run_inference__(T)
+        self.qbeta_sample = qbeta.eval()
 
     def collapsed_gibbs(self, wordIds, S, T):
         K = self.K
@@ -87,12 +87,12 @@ class LDA(object):
                 ed.complete_conditional(self.theta[d])
             proposal_vars[self.z[d]] = \
                 ed.complete_conditional(self.z[d], cond_set)
-            print(d)
         self.inference = ed.Gibbs(latent_vars, proposal_vars, training_data)
         print("collapsed gibbs setup finished")
         self.inference.initialize(n_iter=T, n_print=1)
         print("initialize finished")
         self.__run_inference__(T)
+        self.qbeta_sample = qbeta.eval()
 
     def collapsed(self, w, S, T, tokens):
         K = self.K
@@ -110,34 +110,26 @@ class LDA(object):
                 _ndk[d][z] += 1
                 _nvk[w[d][n]][z] += 1
         self.qz = qz = [tf.Variable(_qz[d]) for d in range(D)]
-        # self.ndk = ndk = [tf.Variable(_ndk[d]) for d in range(D)]
-        self.ndk = ndk = tf.Variable(_ndk)
-        # self.nvk = nvk = [tf.Variable(_nvk[v]) for v in range(V)]
-        self.nvk = nvk = tf.Variable(_nvk)
+        self.ndk = ndk = [tf.Variable(_ndk[d]) for d in range(D)]
+        # self.ndk = ndk = tf.Variable(_ndk)
+        self.nvk = nvk = [tf.Variable(_nvk[v]) for v in range(V)]
+        # self.nvk = nvk = tf.Variable(_nvk)
         self.nk = nk = tf.reduce_sum(ndk, axis=0)
-        # self.qz_prob = qz_prob = [(ndk[d] + alpha) * tf.gather(nvk, w[d])
-        #                          / (nk + V * beta) for d in range(D)]
-        # qz_prob = [qz_prob[d] / tf.reshape(tf.reduce_sum(
-        #           qz_prob[d], axis=-1), (-1, 1)) for d in range(D)]
         qz_prob = [(ndk[d] + alpha) * tf.gather(nvk, w[d]) / (nk + V * beta) /
                    tf.reshape(tf.reduce_sum((ndk[d] + alpha) *
                                             tf.gather(nvk, w[d]) /
                                             (nk + V * beta), axis=-1),
                               (-1, 1)) for d in range(D)]
-        # self.qz_prob = qz_prob = [[(ndk[d] + alpha) * nvk[wordIds[d][n]]
-        #                           / (nk + V * beta) for n in range(N[d])]
-        #                          for d in range(D)]
         self.qbeta = (tf.convert_to_tensor(nvk) + beta) / (nk + V * beta)
         self.update_ops = ops = [tf.no_op(), tf.no_op()]
         for d in range(D):
-            print(d)
             for n in range(N[d]):
                 with tf.control_dependencies([ops[-1], ops[-2]]):
                     oldk = qz[d][n]
-                    # ops.append(tf.scatter_sub(ndk[d], [oldk], [1]))
-                    ops.append(tf.scatter_nd_sub(ndk, [(d, oldk)], [1]))
-                    # ops.append(tf.scatter_sub(nvk[w[d][n]], [oldk], [1]))
-                    ops.append(tf.scatter_nd_sub(nvk, [(w[d][n], oldk)], [1]))
+                    ops.append(tf.scatter_sub(ndk[d], [oldk], [1]))
+                    # ops.append(tf.scatter_nd_sub(ndk, [(d, oldk)], [1]))
+                    ops.append(tf.scatter_sub(nvk[w[d][n]], [oldk], [1]))
+                    # ops.append(tf.scatter_nd_sub(nvk, [(w[d][n], oldk)],[1]))
                 # sequentially
                 with tf.control_dependencies([ops[-1], ops[-2]]):
                     k = tf.multinomial(tf.log([qz_prob[d][n]]), 1,
@@ -145,15 +137,13 @@ class LDA(object):
                     ops.append(tf.scatter_update(qz[d], [n], k))
                 with tf.control_dependencies([ops[-1]]):
                     newk = qz[d][n]
-                    # ops.append(tf.scatter_add(ndk[d], [newk], [1]))
-                    ops.append(tf.scatter_nd_add(ndk, [(d, newk)], [1]))
-                    # ops.append(tf.scatter_add(nvk[w[d][n]], [newk], [1]))
-                    ops.append(tf.scatter_nd_add(nvk, [(w[d][n], newk)], [1]))
+                    ops.append(tf.scatter_add(ndk[d], [newk], [1]))
+                    # ops.append(tf.scatter_nd_add(ndk, [(d, newk)], [1]))
+                    ops.append(tf.scatter_add(nvk[w[d][n]], [newk], [1]))
+                    # ops.append(tf.scatter_nd_add(nvk, [(w[d][n], newk)],[1]))
         sess = ed.get_session()
-        tf.global_variables_initializer().run()
-        # sess.run(tf.variables_initializer(qz + nvk + ndk))
-        # print(sess.run(qz_prob))
-        # print(sess.run(nvk))
+        # tf.global_variables_initializer().run()
+        sess.run(tf.variables_initializer(qz + nvk + ndk))
         for _ in range(T):
             print("burnin:", _)
             sess.run(ops)
@@ -163,80 +153,33 @@ class LDA(object):
             sess.run(ops)
             qbeta_sample += self.qbeta.eval()
         qbeta_sample /= S
+        self.qbeta_sample = qbeta_sample
+
+    def getTopWords(self, tokens):
+        K = self.K
+        V = self.V
+        qbeta_sample = self.qbeta_sample
         prob = [None] * K
         for k in range(K):
             prob[k] = qbeta_sample[:, k]
-            print(len(prob[k]))
-        tokens_probs = [None] * K
+        self.tokens_probs = tokens_probs = [None] * K
+        self.top_words = [None] * K
         for k in range(K):
-            tokens_probs[k] = dict((t, p) for t, p in zip(tokens, prob[k]))
+            tokens_probs[k] = dict((t, p) for t, p in zip(range(V), prob[k]))
             newdict = sorted(tokens_probs[k],
                              key=tokens_probs[k].get,
-                             reverse=True)[:15]
+                             reverse=True)[:10]
+            self.top_words[k] = newdict
             print('topic %d' % k)
-            for word in newdict:
-                print(word, tokens_probs[k][word])
+            for Id in newdict:
+                print(tokens[Id], tokens_probs[k][Id])
 
-    def klqp(self, wordIds, S, T):
+    def getPMI(self, comatrix):
         K = self.K
-        V = self.V
-        D = self.D
-        N = self.N
-        latent_vars = {}
-        training_data = {}
-        self.qbeta_var = tf.nn.softplus(tf.Variable(tf.zeros([K, V]) + 1. / V),
-                                        name="qbeta")
-        qbeta = Dirichlet(self.qbeta_var)
-        latent_vars[self.beta] = qbeta
-        qtheta = [None] * D
-        qz = [None] * D
-        self.qtheta_var = [tf.nn.softplus(tf.Variable(tf.zeros([K]) + 1. / K),
-                           name="qtheta%d" % d) for d in range(D)]
-        self.qz_var = [tf.nn.softplus(tf.Variable(tf.zeros([K]) + 1. / K),
-                       name="qz%d" % d) for d in range(D)]
-        for d in range(D):
-            qtheta[d] = Dirichlet(self.qtheta_var[d])
-            latent_vars[self.theta[d]] = qtheta[d]
-            qz[d] = Categorical(probs=self.qz_var[d], sample_shape=[N[d]])
-            latent_vars[self.z[d]] = qz[d]
-            training_data[self.w[d]] = wordIds[d]
-        self.latent_vars = latent_vars
-        self.inference = ed.KLqp(latent_vars, data=training_data)
-        print("klqp setup finished")
-        optimizer = tf.train.AdamOptimizer(0.01, epsilon=1.0)
-        # optimizer = tf.train.GradientDescentOptimizer(0.001)
-        self.inference.initialize(n_iter=T, n_print=1, n_samples=S,
-                                  optimizer=optimizer, logdir='log/')
-        self.__run_inference__(T, S)
-
-    def criticize(self, tokens):
-        K = self.K
-        qbeta_sample = self.latent_vars[self.beta].sample().eval()
-        pickle.dump(qbeta_sample, open("train2.p", "wb"))
-        prob = [None] * K
+        self.pmis = pmis = [None] * K
         for k in range(K):
-            prob[k] = qbeta_sample[k, :]
-            print(len(prob[k]))
-        tokens_probs = [None] * K
-        for k in range(K):
-            tokens_probs[k] = dict((t, p) for t, p in zip(tokens, prob[k]))
-            newdict = sorted(tokens_probs[k],
-                             key=tokens_probs[k].get,
-                             reverse=True)[:15]
-            print('topic %d' % k)
-            for word in newdict:
-                print(word, tokens_probs[k][word])
-
-    # def evaluate(self, wordIds):
-    #     latent_vars = {}
-    #     latent_vars[self.beta] = self.qbeta
-    #     for d in range(self.D):
-    #         latent_vars[self.theta[d]] = self.qtheta[d]
-    #         latent_vars[self.z[d]] = self.qz[d]
-    #     self.latent_vars = latent_vars
-    #     x_post = ed.copy(self.w, latent_vars)
-    #     self.postlog = ed.evaluate('log_likelihood', data={x_post: wordIds})
-    #     print (self.postlog)
+            pmis[k] = util.pmi(comatrix, self.top_words[k])
+            print('topic %d pmi: %f' % (k, pmis[k]))
 
 
 class GaussianLDA(object):
@@ -253,10 +196,7 @@ class GaussianLDA(object):
             scale=sigma0,
             cholesky_input_output_matrices=True,
             sample_shape=K)
-        sigma_inv = tf.matrix_inverse(sigma)
-        #self.mu = mu = MultivariateNormalTriL(
-        #    loc=mu0,
-        #    scale_tril=sigma)
+        # sigma_inv = tf.matrix_inverse(sigma)
         self.mu = mu = Normal(mu0, tf.ones(nu), sample_shape=K)
         self.theta = theta = [None] * D
         self.z = z = [None] * D
@@ -274,7 +214,7 @@ class GaussianLDA(object):
                 z[d] = Categorical(probs=theta[d], sample_shape=N[d])
                 components = [
                     MultivariateNormalTriL(loc=tf.gather(mu, k),
-                                           scale_tril=tf.gather(sigma_inv, k),
+                                           scale_tril=tf.gather(sigma, k),
                                            sample_shape=N[d])
                     for k in range(K)]
                 w[d] = Mixture(cat=z[d],
@@ -323,7 +263,6 @@ class GaussianLDA(object):
             loc=tf.Variable(tf.random_normal([K, nu])),
             scale=tf.nn.softplus(tf.Variable(tf.zeros([K, nu]))))
         latent_vars[self.mu] = qmu
-        #qpsi0 = tf.Variable(tf.random_normal([K, nu, nu]))
         qpsi0 = tf.Variable(tf.eye(nu, batch_shape=[K]))
         Ltril = tf.linalg.LinearOperatorLowerTriangular(
             ds.matrix_diag_transform(
@@ -337,16 +276,15 @@ class GaussianLDA(object):
         for d in range(D):
             training_data[self.w[d]] = docs[d]
         self.qmu = qmu
-        self.qsigma_inv = qsigma_inv = tf.matrix_inverse(qsigma)
-        self.qw = MultivariateNormalTriL(loc=qmu, scale_tril=qsigma_inv)
+        # self.qsigma_inv = qsigma_inv = tf.matrix_inverse(qsigma)
+        self.qw = MultivariateNormalTriL(loc=qmu, scale_tril=qsigma)
         V = len(wordVec)
         logprobs = [None] * V
         for i in range(V):
-            print("logprob:", i)
             logprobs[i] = self.qw.log_prob(wordVec[i])
         self.qbeta = tf.convert_to_tensor(logprobs)
         self.inference = ed.KLqp(latent_vars, data=training_data)
-        self.inference.initialize(n_iter=T, n_print=10, n_samples=S, logdir='log/')
+        self.inference.initialize(n_iter=T, n_print=10, n_samples=S)
         self.__run_inference__(T)
 
     def getTopWords(self, wordVec, tokens):
@@ -386,7 +324,6 @@ class SimpleGaussianLDA(object):
         self.alpha = alpha = tf.zeros([K]) + 0.1
         self.sigmasq = InverseGamma(tf.ones(nu), tf.ones(nu), sample_shape=K)
         self.sigma = sigma = tf.sqrt(self.sigmasq)
-        #self.mu = mu = MultivariateNormalDiag(mu0, sigma)
         self.mu = mu = Normal(tf.zeros(nu), tf.ones(nu), sample_shape=K)
         self.theta = theta = [None] * D
         self.z = z = [None] * D
@@ -439,11 +376,10 @@ class SimpleGaussianLDA(object):
         V = len(wordVec)
         logprobs = [None] * V
         for i in range(V):
-            print("logprob:", i)
             logprobs[i] = self.qw.log_prob(wordVec[i])
         self.qbeta = tf.convert_to_tensor(logprobs)
         self.inference = ed.KLqp(latent_vars, data=training_data)
-        self.inference.initialize(n_iter=T, n_print=10, n_samples=S, logdir='log/')
+        self.inference.initialize(n_iter=T, n_print=10, n_samples=S)
         self.__run_inference__(T)
 
     def getTopWords(self, wordVec, tokens):

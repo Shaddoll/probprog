@@ -1,6 +1,3 @@
-import numpy as np
-import tensorflow as tf
-import edward as ed
 import glob
 import pickle
 from models.lda import GaussianLDA
@@ -31,8 +28,8 @@ print("dimension:", nu)
 
 wordToId = dict()
 tokens = []
-#with open("DataPreprocess/wordToID_short_12_20.txt") as f:
-with open("DataPreprocess/wordToID_short_12.txt") as f:
+# with open("DataPreprocess/wordToID_short_12.txt") as f:
+with open("DataPreprocess/wordToID_short_12_20.txt") as f:
     for line in f:
         line = line.split()
         wordToId[line[0]] = len(tokens)
@@ -42,14 +39,14 @@ print("vocab size is {}".format(V))
 print("load wordId finished")
 
 wordVec = [None] * V
-#with open("DataPreprocess/we_12_20.txt") as f:
-with open("DataPreprocess/word_vectors_25.txt") as f:
+# with open("DataPreprocess/word_vectors_25.txt") as f:
+with open("DataPreprocess/we_12_20.txt") as f:
     for line in f:
         line = line.split()
         if line[0] in wordToId:
             wordVec[wordToId[line[0]]] = list(map(float, line[1:]))
 print("load word embeddings finished")
-#D=20
+D = 20
 
 model = GaussianLDA(K, D, N, nu)
 print("model constructed")
@@ -59,7 +56,7 @@ print(time.time() - t1)
 model.getTopWords(wordVec, tokens)
 print("get top words finished")
 print(time.time() - t1)
-#comatrix = pickle.load(open("20abstract1yearAll.pickle", "rb"))
-comatrix = pickle.load(open("DataPreprocess/comatrix1y.pickle", "rb"))
+comatrix = pickle.load(open("20abstract1yearAll.pickle", "rb"))
+# comatrix = pickle.load(open("DataPreprocess/comatrix1y.pickle", "rb"))
 model.getPMI(comatrix)
 print(time.time() - t1)
