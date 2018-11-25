@@ -253,7 +253,7 @@ class GaussianLDA(object):
             scale=sigma0,
             cholesky_input_output_matrices=True,
             sample_shape=K)
-        #sigma_inv = tf.matrix_inverse(sigma)
+        sigma_inv = tf.matrix_inverse(sigma)
         #self.mu = mu = MultivariateNormalTriL(
         #    loc=mu0,
         #    scale_tril=sigma)
@@ -274,7 +274,7 @@ class GaussianLDA(object):
                 z[d] = Categorical(probs=theta[d], sample_shape=N[d])
                 components = [
                     MultivariateNormalTriL(loc=tf.gather(mu, k),
-                                           scale_tril=tf.gather(sigma, k),
+                                           scale_tril=tf.gather(sigma_inv, k),
                                            sample_shape=N[d])
                     for k in range(K)]
                 w[d] = Mixture(cat=z[d],
@@ -337,8 +337,8 @@ class GaussianLDA(object):
         for d in range(D):
             training_data[self.w[d]] = docs[d]
         self.qmu = qmu
-        #self.qsigma_inv = qsigma_inv = tf.matrix_inverse(qsigma)
-        self.qw = MultivariateNormalTriL(loc=qmu, scale_tril=qsigma)
+        self.qsigma_inv = qsigma_inv = tf.matrix_inverse(qsigma)
+        self.qw = MultivariateNormalTriL(loc=qmu, scale_tril=qsigma_inv)
         V = len(wordVec)
         logprobs = [None] * V
         for i in range(V):
@@ -404,7 +404,7 @@ class SimpleGaussianLDA(object):
                 z[d] = Categorical(probs=theta[d], sample_shape=N[d])
                 components = [
                     MultivariateNormalDiag(loc=tf.gather(mu, k),
-                                           scale_diag=tf.gather(self.sigmasq, k),
+                                           scale_diag=tf.gather(self.sigma, k),
                                            sample_shape=N[d])
                     for k in range(K)]
                 w[d] = Mixture(cat=z[d],
@@ -434,8 +434,8 @@ class SimpleGaussianLDA(object):
         for d in range(D):
             training_data[self.w[d]] = docs[d]
         self.qmu = qmu
-        #self.qsigma = qsigma = tf.sqrt(qsigmasq)
-        self.qw = MultivariateNormalDiag(loc=qmu, scale_diag=qsigmasq)
+        self.qsigma = qsigma = tf.sqrt(qsigmasq)
+        self.qw = MultivariateNormalDiag(loc=qmu, scale_diag=qsigma)
         V = len(wordVec)
         logprobs = [None] * V
         for i in range(V):
