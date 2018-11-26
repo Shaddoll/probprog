@@ -228,31 +228,6 @@ class GaussianLDA(object):
             self.inference.print_progress(info_dict)
         self.inference.finalize()
 
-    def gibbs(self, docs, S, T):
-        K = self.K
-        D = self.D
-        N = self.N
-        nu = self.nu
-        latent_vars = {}
-        training_data = {}
-        qmu = Empirical(tf.Variable(tf.zeros([S, K, nu])))
-        latent_vars[self.mu] = qmu
-        qsigma = Empirical(tf.Variable(tf.zeros([S, K, nu, nu])))
-        latent_vars[self.sigma] = qsigma
-        qtheta = [None] * D
-        qz = [None] * D
-        for d in range(D):
-            qtheta[d] = Empirical(tf.Variable(tf.zeros([S, K]) + 0.1))
-            latent_vars[self.theta[d]] = qtheta[d]
-            qz[d] = Empirical(tf.Variable(tf.zeros([S, N[d]], dtype=tf.int32)))
-            latent_vars[self.z[d]] = qz[d]
-            training_data[self.w[d]] = docs[d]
-        self.inference = ed.MetropolisHastings(latent_vars, data=training_data)
-        print("gibbs setup finished")
-        self.inference.initialize(n_iter=T, n_print=1)
-        print("initialize finished")
-        self.__run_inference__(T)
-
     def klqp(self, docs, S, T, wordVec):
         K = self.K
         D = self.D

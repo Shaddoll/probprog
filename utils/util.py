@@ -63,4 +63,6 @@ def pmi(comatrix, words, wordToId=None):
                 result -= math.log2(comatrix[:, a].sum())
                 cnt += 1
     print(cnt)
+    if cnt == 0.0:
+        return float('nan')
     return result / cnt
