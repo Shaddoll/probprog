@@ -1,1 +1,0 @@
-abstract describ reinforc learn algorithm partial observ environ use short term memori call blht sinc blht learn stochast model base bayesian learn overfit problem reason solv moreov blht effici implement paper show model learn blht converg one provid accur predict percept reward given short term memori

@@ -1,1 +1,0 @@
-abstract propos new learn method gener learn vector quantiz glvq refer vector updat base steepest descent method order minim cost function cost function deternfin obtain learn rule satisfi converg condit prove kohonen rule use lvq satisfi converg condit thu degrad recognit abil experiment result print chines charact recognit reveal glvq superior lvq recognit abil

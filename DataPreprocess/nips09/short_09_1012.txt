@@ -1,1 +1,0 @@
-abstract new reinforc learn architectur nonlinear control propos direct feedback control actor train valu gradient base control tutor architectur enabl effici use valu function simpl comput real time implement good perform verifi multi dimension nonlinear control task use gaussian softmax network

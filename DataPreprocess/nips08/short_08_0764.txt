@@ -1,1 +1,0 @@
-abstract hybrid contextu radial basi function network hidden markov model line handwritten word recognit system present task assign radial basi function network estim emiss probabl associ markov state model contextu estim emiss probabl take account left context current imag segment repres predecessor sequenc new system outperform previou system without context act differ

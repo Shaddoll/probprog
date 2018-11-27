@@ -1,1 +1,0 @@
-abstract recent model supervis learn probabilist transduc repres suffix tree introduc howev algorithm tend build larg tree requir larg amount comput memori paper propos new compact transduc model one share paramet distribut associ context yield similar condit output distribut illustr advantag propos algorithm compar experi induc noun phrase recogn

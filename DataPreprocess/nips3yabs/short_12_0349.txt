@@ -1,1 +1,0 @@
-abstract describ framework interpret support vector machin svm maximum posterjori map solut infer problem gaussian process prior provid intuit guidelin choos good svm kernel also assign evid maxim optim valu paramet nois level cannot determin unambigu properti map solut alon cross valid error illustr use simpl approxim express svm evid determin error bar svm predict also obtain

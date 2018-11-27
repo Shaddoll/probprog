@@ -1,1 +1,0 @@
-abstract paper present new approach problem model daili rainfal use neural network first model condit distribut rainfal amount way model determin order process time depend shape scale condit distribut integr particular weather pattern abl extract season variat long term trend

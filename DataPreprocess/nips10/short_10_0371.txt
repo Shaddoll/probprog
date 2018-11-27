@@ -1,1 +1,0 @@
-abstract demonstr problem train neural network small averag squar error comput intract consid data set point xi xi input vector real output netm work class neural network ei xi fe im xi yi avarag rel error occur one tri fit data set prove sever class neural network achiev rel error smaller fix posit threshold independ size data set np hard

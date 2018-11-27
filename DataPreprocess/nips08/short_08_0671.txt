@@ -1,1 +1,0 @@
-abstract analog electron cochlear model need exponenti scale filter cmo compat later bipolar transistor clbt creat exponenti scale current bias use resist line voltag differ end line sinc clbt independ cmo threshold voltag current sourc implement clbt much better match current sourc creat mo transistor oper weak invers measur integr test chip shown verifi improv match

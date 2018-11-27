@@ -1,1 +1,0 @@
-abstract use constant statist constraint calibr array sensor contain gain offset variat algorithm map analog hardwar design fabric um cmo technolog measur result chip show system achiev invari gain offset variat input signal

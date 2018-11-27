@@ -1,1 +1,0 @@
-abstract stabil criterion dynam paramet adapt given case learn rate backpropag class stabl algorithm present studi includ converg proof

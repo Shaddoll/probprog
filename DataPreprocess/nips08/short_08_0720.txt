@@ -1,1 +1,0 @@
-abstract describ two parallel analog vlsi architectur integr optic flow data obtain array elementari veloc sensor estim head direct time contact head direct comput perform simul evalu import qualit properti optic flow field determin best function oper implement architectur time contact exploit diverg theorem integr data veloc sensor present architectur averag possibl error

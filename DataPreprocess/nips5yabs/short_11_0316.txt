@@ -1,1 +1,0 @@
-abstract solv dynam line hebbian learn perceptron exactli regim size train set scale linearli number input consid noiseless noisi teacher calcul cannot extend nonhebbian rule solut provid nice benchmark test gener advanc theori solv dynam learn restrict train set

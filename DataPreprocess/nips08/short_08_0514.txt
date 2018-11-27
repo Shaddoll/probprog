@@ -1,1 +1,0 @@
-abstract bayesian analysi neural network difficult simpl prior weight impli complex prior distribut function paper investig use gaussian process prior function permit predict bayesian analysi fix valu hyperparamet carri exactli use matrix oper two method use optim averag via hybrid mont carlo hyperparamet test number challeng problem produc excel result
