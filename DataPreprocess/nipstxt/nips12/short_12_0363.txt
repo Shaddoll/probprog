@@ -1,1 +1,0 @@
-abstract paper discuss semiparametr statist model blind deconvolut first introduc lie group manifold noncaus fir filter blind deconvolut problem formul framework semiparametr model famili estim function deriv blind deconvolut natur gradient learn algorithm develop train noncaus filter stabil natur gradient algorithm also analyz framework

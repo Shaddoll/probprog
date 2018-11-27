@@ -1,1 +1,0 @@
-abstract develop vlsi silicon neuron correspond mathemat model two state variabl system describ circuit implement compar behavior observ silicon neuron mathemat model also perform bifurc analysi mathemat model vari extern appli current show behavior exhibit silicon neuron correspond condit good agreement predict bifurc analysi
