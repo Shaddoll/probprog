@@ -1,0 +1,34 @@
+{
+  "/Users/yiranwang/Documents/probprog/DataPreprocess/Datapreprocess.py": [
+    1543183878.1670842,
+    []
+  ],
+  "/Users/yiranwang/Documents/probprog/DataPreprocess/POStagging.py": [
+    1543183878.167577,
+    []
+  ],
+  "/Users/yiranwang/Documents/probprog/DataPreprocess/Preprocess_WordEmbedding.py": [
+    1543183878.1680388,
+    []
+  ],
+  "/Users/yiranwang/Documents/probprog/main.py": [
+    1543183884.387815,
+    []
+  ],
+  "/Users/yiranwang/Documents/probprog/models/lda.py": [
+    1543273813.1502757,
+    []
+  ],
+  "/Users/yiranwang/Documents/probprog/test.py": [
+    1543332500.9174378,
+    []
+  ],
+  "/Users/yiranwang/Documents/probprog/utils/plot.py": [
+    1543183884.4033682,
+    []
+  ],
+  "/Users/yiranwang/Documents/probprog/utils/util.py": [
+    1543273813.150992,
+    []
+  ]
+}

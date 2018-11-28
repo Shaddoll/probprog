@@ -1,0 +1,10 @@
+[
+  "main.py::FLAKE8",
+  "test.py::FLAKE8",
+  "DataPreprocess/Datapreprocess.py::FLAKE8",
+  "DataPreprocess/POStagging.py::FLAKE8",
+  "DataPreprocess/Preprocess_WordEmbedding.py::FLAKE8",
+  "models/lda.py::FLAKE8",
+  "utils/plot.py::FLAKE8",
+  "utils/util.py::FLAKE8"
+]
