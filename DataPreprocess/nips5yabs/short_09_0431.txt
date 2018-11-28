@@ -1,1 +1,0 @@
-abstract modif describ use mean field approxim step em algorithm analys data latent structur model describ ghahramani among other modif involv second order taylor approxim expect comput step potenti benefit method illustr use simpl latent profil model

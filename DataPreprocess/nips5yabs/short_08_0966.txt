@@ -1,1 +1,0 @@
-abstract paper discuss use multilay feedforward neural network predict stock excess return base exposur variou technic fundament factor demonstr effect approach hedg portfolio consist equal capit long short posit construct histor return benchmark bill return cp index

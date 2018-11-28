@@ -1,1 +1,0 @@
-abstract introduc two new techniqu densiti estim approach pose problem supervis learn task perform use neural network introduc stochast method learn cumul distribut analog determinist techniqu demonstr converg method theoret experiment provid comparison parzen estim theoret result demonstr better converg properti parzen estim

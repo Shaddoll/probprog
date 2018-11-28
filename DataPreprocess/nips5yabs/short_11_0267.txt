@@ -1,1 +1,0 @@
-abstract analyz asymptot behavior autoregress neural network ar nn process use techniqu markov chain non linear time seri analysi shown standard ar nn without shortcut connect asymptot stationari linear shortcut connect allow shortcut weight determin whether overal system stationari henc standard condit linear ar process use

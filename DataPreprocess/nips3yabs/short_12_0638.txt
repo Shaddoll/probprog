@@ -1,1 +1,0 @@
-abstract paper treat input select radial basi function rbf like classifi within bayesian framework approxim posteriori distribut model coeffici input subset sampl drawn gibb updat revers jump move use public dataset compar classif accuraci method convent ard scheme dataset also use infer posteriori probabl differ input subset

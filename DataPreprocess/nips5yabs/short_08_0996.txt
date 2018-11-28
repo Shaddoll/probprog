@@ -1,1 +1,0 @@
-abstract paper describ polici iter algorithm optim perform harmon function base control respect user defin index valu function repres potenti distribut problem domain control polici repres gradient field domain intermedi polici intrins safe collis promot adapt process algorithm effici implement parallel simd architectur one potenti applic travel distanc minim illustr use

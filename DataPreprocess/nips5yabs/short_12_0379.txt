@@ -1,1 +1,0 @@
-abstract paper propos full bayesian model neural network model treat model dimens number neuron model paramet regularis paramet nois paramet random variabl need estim propos revers jump markov chain mont carlo mcmc method perform necessari comput find result better previous report one also appear robust respect prior specif moreov present geometr converg theorem algorithm

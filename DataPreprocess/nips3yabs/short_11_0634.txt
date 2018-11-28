@@ -1,1 +1,0 @@
-abstract paper introduc new class imag model call dynam tree dt dynam tree model specifi prior larg number tree one tree structur belief net tsbn experi show dt capabl gener imag less blocki model better translat invari properti fix balanc tsbn also show simul anneal effect find tree high posterior probabl

@@ -1,1 +1,0 @@
-abstract present three simpl approxim calcul posterior mean gaussian process classif first two method relat mean field idea known statist physic third approach base bayesian onlin approach motiv recent result statist mechan neural network present simul result show mean field bayesian evid may use hyperparamet tune onlin approach may achiev low train error fast

@@ -1,1 +1,0 @@
-abstract two develop nonlinear latent variabl model base radial basi function discuss first use prior constraint allow model consid mean preserv data structur low dimension represent visualis purpos also resampl approach introduc make effect use latent sampl evalu likelihood

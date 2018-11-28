@@ -1,1 +1,0 @@
-abstract techniqu princip compon analysi pca recent express maximum likelihood solut gener latent variabl model paper use probabilist reformul basi bayesian treatment pca key result effect dimension latent space equival number retain princip compon determin automat part bayesian infer procedur import applic framework mixtur probabilist pca model compon determin effect complex

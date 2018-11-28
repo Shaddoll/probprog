@@ -1,1 +1,0 @@
-abstract bayesian mixtur model necessari priori limit number compon finit paper infinit gaussian mixtur model present neatli sidestep difficult problem find right number mixtur compon infer model done use effici paramet free markov chain reli entir gibb sampl

@@ -1,1 +1,0 @@
-abstract describ implement hidden markov model state decod system compon wordspot speech recognit system key specif state decod design microwatt power dissip requir led continuoustim analog circuit implement character oper word state state decod test chip

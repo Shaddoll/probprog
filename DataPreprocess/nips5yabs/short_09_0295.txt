@@ -1,1 +1,0 @@
-abstract neural network wide class weight prior shown limit infinit number hidden unit prior function tend gaussian process paper analyt form deriv covari function gaussian process correspond network sigmoid gaussian hidden unit allow predict made effici use network infinit number hidden unit show somewhat paradox may easier comput infinit network finit one

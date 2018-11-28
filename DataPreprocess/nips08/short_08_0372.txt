@@ -1,1 +1,0 @@
-abstract given recurr neural network discret time model may asymptot dynam differ one relat continu time model paper consid discret time model discret continu time leaki integr model studi parallel sequenti dynam symmetr network provid suffici necessari mani case condit discret model cycl free dynam correspond continu time model symmetr network

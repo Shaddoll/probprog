@@ -1,1 +1,0 @@
-abstract new nearest neighbor method describ estim bay risk multiclass pattern classif problem sampl data classifi train set although assum classif problem accur describ suffici smooth class condit distribut neither distribut correspond prior probabl class requir thu method appli practic problem underli probabl known method illustr use two differ pattern recognit problem

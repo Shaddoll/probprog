@@ -1,1 +1,0 @@
-abstract neural network base approach present control two distinct type nonlinear system first correspond nonlinear system parametr uncertainti paramet occur nonlinearli second correspond system stabil control structur cannot determin propos neural control shown result close loop system stabil certain condit

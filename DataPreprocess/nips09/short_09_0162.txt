@@ -1,1 +1,0 @@
-abstract articl present new result size multilay neural network comput real output exact learn finit set real sampl architectur network feedforward one hidden layer sever output start fix train set consid network function weight deriv wide famili transfer function lower upper bound number hidden unit exact learn given size dataset dimens input output space

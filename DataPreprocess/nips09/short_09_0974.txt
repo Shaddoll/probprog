@@ -1,1 +1,0 @@
-abstract cellular telephon system import problem dynam alloc commun resourc channel maxim servic stochast caller environ problem natur formul dynam program problem use reinforc learn rl method find dynam channel alloc polici better previou heurist solut polici obtain perform well broad varieti call traffic pattern present result larg cellular system approxim state

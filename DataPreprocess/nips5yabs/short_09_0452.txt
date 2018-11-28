@@ -1,1 +1,0 @@
-abstract real valu random hidden variabl use model latent structur explain correl among observ variabl propos simpl unit add zero mean gaussian nois input pass sigmoid squash function unit produc varieti use behavior rang determinist binari stochast continu stochast show slice sampl use infer learn top network unit demonstr learn two simpl problem

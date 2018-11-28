@@ -1,1 +1,0 @@
-abstract paper examin perceptron learn task task realiz sinc provid anoth perceptron ident architectur perceptron nonlinear sigmoid output function gain output function determin level nonlinear learn task observ high level nonlinear lead overfit give explan rather surpris observ develop method avoid overfit method two possibl interpret one learn nois cross valid earli stop
